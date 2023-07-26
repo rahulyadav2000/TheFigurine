@@ -21,6 +21,7 @@ public class MapGenerator : MonoBehaviour
     private void Update()
     {
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
+        
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)

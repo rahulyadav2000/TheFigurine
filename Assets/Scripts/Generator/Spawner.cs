@@ -105,11 +105,17 @@ public class Spawner : MonoBehaviour
             if(wanderer != null)
             {
                 Vector3 playerPos = GameObject.Find("Tori").transform.position;
-                playerPos += Random.insideUnitSphere.normalized * 35;
+                /*playerPos += Random.insideUnitSphere.normalized * 35;
                 playerPos.y = 0f;
+                playerPos = new Vector3(Mathf.Clamp(playerPos.x, 0f, 150f), 0f, Mathf.Clamp(playerPos.z, 0f, 150f));*/
+
+                float distanceFromPlayer = 20f;
+                float angleFromPlayer = Random.Range(0f, 180f);
+
+                Vector3 spawnOffset = Quaternion.Euler(0f, angleFromPlayer, 0f) * Vector3.forward * distanceFromPlayer;
                 playerPos = new Vector3(Mathf.Clamp(playerPos.x, 0f, 150f), 0f, Mathf.Clamp(playerPos.z, 0f, 150f));
 
-                wanderer.transform.position = playerPos;
+                wanderer.transform.position = playerPos + spawnOffset;
                 wanderer.SetActive(true);
                 enemyPrefab.SetActive(false);
                 enemyCount++;
@@ -122,7 +128,7 @@ public class Spawner : MonoBehaviour
         enemyCount--;
         if(enemyCount <= 0)
         {
-            WandererSpawner();
+            //WandererSpawner();
         }
     }
 
@@ -176,6 +182,8 @@ public class Spawner : MonoBehaviour
             Vector3 pos = new Vector3(145, 0, 145);
             Instantiate(doorPortal, pos, Quaternion.identity);
             wandererCount = 0;
+
+            WandererSpawner();
         }
     }
 }

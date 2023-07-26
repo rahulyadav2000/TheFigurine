@@ -80,6 +80,24 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""processors"": """",
                     ""interactions"": """",
                     ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Pickup"",
+                    ""type"": ""Button"",
+                    ""id"": ""99a70393-fcdf-4a21-a9c8-d452258eeab9"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
+                },
+                {
+                    ""name"": ""Inventory"",
+                    ""type"": ""Button"",
+                    ""id"": ""0c3f4321-1e62-421e-a2f1-cb7b16732878"",
+                    ""expectedControlType"": ""Button"",
+                    ""processors"": """",
+                    ""interactions"": """",
+                    ""initialStateCheck"": false
                 }
             ],
             ""bindings"": [
@@ -192,6 +210,28 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                     ""action"": ""Shooting"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""3c6e8078-61e7-452f-b7ad-240d9a6c29b9"",
+                    ""path"": ""<Keyboard>/e"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Pickup"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
+                },
+                {
+                    ""name"": """",
+                    ""id"": ""1357948b-b0fc-4eb7-9ad9-b31486c7af17"",
+                    ""path"": ""<Keyboard>/i"",
+                    ""interactions"": """",
+                    ""processors"": """",
+                    ""groups"": """",
+                    ""action"": ""Inventory"",
+                    ""isComposite"": false,
+                    ""isPartOfComposite"": false
                 }
             ]
         }
@@ -206,6 +246,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         m_PlayerControls_Aiming = m_PlayerControls.FindAction("Aiming", throwIfNotFound: true);
         m_PlayerControls_Look = m_PlayerControls.FindAction("Look", throwIfNotFound: true);
         m_PlayerControls_Shooting = m_PlayerControls.FindAction("Shooting", throwIfNotFound: true);
+        m_PlayerControls_Pickup = m_PlayerControls.FindAction("Pickup", throwIfNotFound: true);
+        m_PlayerControls_Inventory = m_PlayerControls.FindAction("Inventory", throwIfNotFound: true);
     }
 
     public void Dispose()
@@ -271,6 +313,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
     private readonly InputAction m_PlayerControls_Aiming;
     private readonly InputAction m_PlayerControls_Look;
     private readonly InputAction m_PlayerControls_Shooting;
+    private readonly InputAction m_PlayerControls_Pickup;
+    private readonly InputAction m_PlayerControls_Inventory;
     public struct PlayerControlsActions
     {
         private @PlayerInputs m_Wrapper;
@@ -281,6 +325,8 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         public InputAction @Aiming => m_Wrapper.m_PlayerControls_Aiming;
         public InputAction @Look => m_Wrapper.m_PlayerControls_Look;
         public InputAction @Shooting => m_Wrapper.m_PlayerControls_Shooting;
+        public InputAction @Pickup => m_Wrapper.m_PlayerControls_Pickup;
+        public InputAction @Inventory => m_Wrapper.m_PlayerControls_Inventory;
         public InputActionMap Get() { return m_Wrapper.m_PlayerControls; }
         public void Enable() { Get().Enable(); }
         public void Disable() { Get().Disable(); }
@@ -308,6 +354,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Shooting.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnShooting;
                 @Shooting.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnShooting;
                 @Shooting.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnShooting;
+                @Pickup.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPickup;
+                @Pickup.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPickup;
+                @Pickup.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnPickup;
+                @Inventory.started -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnInventory;
+                @Inventory.performed -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnInventory;
+                @Inventory.canceled -= m_Wrapper.m_PlayerControlsActionsCallbackInterface.OnInventory;
             }
             m_Wrapper.m_PlayerControlsActionsCallbackInterface = instance;
             if (instance != null)
@@ -330,6 +382,12 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
                 @Shooting.started += instance.OnShooting;
                 @Shooting.performed += instance.OnShooting;
                 @Shooting.canceled += instance.OnShooting;
+                @Pickup.started += instance.OnPickup;
+                @Pickup.performed += instance.OnPickup;
+                @Pickup.canceled += instance.OnPickup;
+                @Inventory.started += instance.OnInventory;
+                @Inventory.performed += instance.OnInventory;
+                @Inventory.canceled += instance.OnInventory;
             }
         }
     }
@@ -342,5 +400,7 @@ public partial class @PlayerInputs : IInputActionCollection2, IDisposable
         void OnAiming(InputAction.CallbackContext context);
         void OnLook(InputAction.CallbackContext context);
         void OnShooting(InputAction.CallbackContext context);
+        void OnPickup(InputAction.CallbackContext context);
+        void OnInventory(InputAction.CallbackContext context);
     }
 }

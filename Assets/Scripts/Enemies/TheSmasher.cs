@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.VisualScripting;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -15,11 +16,15 @@ public class TheSmasher : MonoBehaviour
     private Transform target;
     private bool isWanderer = false;
 
+    public SphereCollider handCollider;
+    public SphereCollider specialAttackCollider;
     public void Start()
     {
         startPosition = transform.position;
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
+
+        handCollider.enabled = false;
     }
 
     // Update is called once per frame
@@ -31,8 +36,11 @@ public class TheSmasher : MonoBehaviour
         ChaseTask chaseTask = new ChaseTask(taskManager, target, anim, navAgent);
         taskManager.AddTask(chaseTask);
 
-        AttackTask attackTask = new AttackTask(taskManager, anim, navAgent, target);
+        AttackTask attackTask = new AttackTask(taskManager, anim, navAgent, target, handCollider);
         taskManager.AddTask(attackTask);
+
+        Attack2Task attack2Task = new Attack2Task(taskManager, anim, navAgent, target, specialAttackCollider);
+        taskManager.AddTask(attack2Task);
 
         DieTask dieTask = new DieTask(taskManager, navAgent, anim, isWanderer);
         taskManager.AddTask(dieTask);

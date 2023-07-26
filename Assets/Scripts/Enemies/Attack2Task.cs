@@ -11,12 +11,15 @@ public class Attack2Task : Task
     private TaskManager taskManager;
     private Transform target;
     private bool isSpecialAttack = false;
-    public Attack2Task(TaskManager taskManager, Animator anim, NavMeshAgent agent, Transform target) : base(TaskTypes.ATTACK2, taskManager)
+
+    private SphereCollider sphereCollider;
+    public Attack2Task(TaskManager taskManager, Animator anim, NavMeshAgent agent, Transform target, SphereCollider sphereCollider) : base(TaskTypes.ATTACK2, taskManager)
     {
         this.taskManager = taskManager;
         this.animator = anim;
         this.navAgent = agent;
         this.target = target;
+        this.sphereCollider = sphereCollider;
     }
 
     public override void StartTask()
@@ -28,19 +31,24 @@ public class Attack2Task : Task
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
         //Debug.Log("working!!");
+        //particleObj.SetActive(false);
         taskManager.StartCoroutine(StartAttack());
         taskManager.gameObject.transform.LookAt(target);
     }
 
     IEnumerator StartAttack()
     {
-        yield return new WaitForSeconds(1);
-        animator.SetBool("specialAttack", true);
+        //yield return new WaitForSeconds(1f);
+        animator.SetBool("specialAttack", true); 
         animator.SetBool("attack", false);
-        yield return new WaitForSeconds(3f);
+
+        yield return new WaitForSeconds(2f);
+        sphereCollider.enabled = true;
+        yield return new WaitForSeconds(1f);
+        sphereCollider.enabled= false;
 
         FinishTask();
+        yield return new WaitForSeconds(1.5f);
     }
-
 }
 

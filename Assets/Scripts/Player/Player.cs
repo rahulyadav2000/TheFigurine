@@ -27,28 +27,35 @@ public class Player : MonoBehaviour
     private InputAction run;
     private InputAction aiming;
     private InputAction shooting;
+    private InputAction pickup;
+    private InputAction inventoryKey;
 
     private float speed = 4f;
     [SerializeField] private float hitRange;
 
-    public HealthSystem enemyHealth;
     public HealthSystem playerHealth;
 
     private bool canShoot = true;
     private bool isRunning = false;
-    private bool isDead = false;
-
+    public bool isDead = false;
+    private bool isAiming = false;
+    public bool isInventoryActive { get; set; } = false;
 
     private float shootCooldown = 0.5f;
 
     public Camera cam;
     public GameObject handArrow;
     public GameObject arrowPrefab;
-    public GameObject loseSceneScreen;
+    //public GameObject loseSceneScreen;
+    public GameObject knifePrefab;
+
     public Transform arrowPos;
     private Transform camTranform;
 
     private Spawner spawner;
+
+    public Item logItem;
+    public Item plantItem;
     private void Awake()
     {
         instance = this;
@@ -56,16 +63,20 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        loseSceneScreen.SetActive(false);
+        //loseSceneScreen.SetActive(false);
         movement = inputs.actions["Movement"];
         attack = inputs.actions["Attack"];
         run = inputs.actions["Run"];
         aiming = inputs.actions["Aiming"];
         shooting = inputs.actions["Shooting"];
+        pickup = inputs.actions["Pickup"];
+        inventoryKey = inputs.actions["Inventory"];
+
 
         camTranform = Camera.main.transform;
         
-        
+        knifePrefab.SetActive(false);
+
         arrowAmountText.text = "Ammo: " + GameData.arrow.ToString();
 
         spawner = Spawner.instance;
@@ -79,7 +90,7 @@ public class Player : MonoBehaviour
         PlayerBehaviour();
         HealthResponse();
         arrowAmountText.text = "Ammo: " + GameData.arrow.ToString();
-        Invoke("TimeManager", 2.5f);
+        
 
         if(isFigCollected)
         {
@@ -114,28 +125,38 @@ public class Player : MonoBehaviour
             {
                 int attackAnim = Animator.StringToHash("PunchAttack");
                 animator.CrossFade(attackAnim, 0.08f);
+                knifePrefab.SetActive(true);
                 speed = 0.0f;
                 characterController.Move(Vector3.zero);
+                Invoke(nameof(KnifeActivator), 1.5f);
             }
+          
 
             if (aiming.IsPressed() && arrow.GetArrowAmount() > 0)
             {
                 animator.SetBool("aiming", true);
+                isAiming = true;
             }
             else
             {
                 animator.SetBool("aiming", false);
             }
 
-            if (shooting.IsPressed())
+            if (shooting.IsPressed() && isAiming)
             {
                 animator.SetBool("shooting", true);
-                Invoke("ShootArrow", 0.5f);
+                Invoke(nameof(ShootArrow), 0.5f);
             }
             else
             {
                 animator.SetBool("shooting", false);
             }
+
+            if(inventoryKey.IsPressed())
+            {
+                isInventoryActive = !isInventoryActive;
+            }
+            
 
             characterController.Move(moveInput * speed * Time.deltaTime);
 
@@ -153,19 +174,22 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("dead", true);
             isDead = true;
+            //Invoke(nameof(TimeManager), 2.5f);
         }
 
         healthBar.fillAmount = GameData.health / 100;
     }
 
-    public void TimeManager()
+    public void KnifeActivator()
     {
-        if(isDead)
-        {
-            Time.timeScale = 0.0f;
-            loseSceneScreen.SetActive(true);
-        }
+        knifePrefab.SetActive(false);
     }
+
+/*    public void TimeManager()
+    {
+        loseSceneScreen.SetActive(true);
+        Time.timeScale = 0.0f;
+    }*/
 
     private void ShootArrow()
     {
@@ -204,11 +228,6 @@ public class Player : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if(other.gameObject.tag == "Ammo")
-        {
-            Debug.Log("Working!");
-            arrow.IncreaseArrowAmount(10);
-        }
 
         if(other.gameObject.tag == "EnemySpawner")
         {
@@ -223,6 +242,26 @@ public class Player : MonoBehaviour
             Debug.Log("Workinggg");
             Destroy(hit.gameObject);
             isFigCollected = true;
+        }
+
+        if(hit.gameObject.CompareTag("Ammo"))
+        {
+            if(pickup.IsPressed())
+            {
+                InventoryManager.instance.AddItem(logItem);
+                //InventoryManager.instance.UpdatingItem();
+                Destroy(hit.gameObject);
+            }
+        }
+        
+        if(hit.gameObject.CompareTag("Health"))
+        {
+            if(pickup.IsPressed())
+            {
+                InventoryManager.instance.AddItem(plantItem);
+                //InventoryManager.instance.UpdatingItem();
+                Destroy(hit.gameObject);
+            }
         }
     }
 }

@@ -4,17 +4,36 @@ using UnityEngine;
 
 public class ReduceHealth: MonoBehaviour
 {
-    [SerializeField] float damage;
+    [SerializeField] private float damage;
+    public GameObject particleObj;
     private void Start()
     {
-    }
-
-    public void OnTriggerEnter(Collider collision)
-    {
-        if (collision.gameObject.CompareTag("Player"))
+        if(particleObj != null)
         {
-            HealthSystem healthSystem = GameObject.FindGameObjectWithTag("Player").GetComponent<HealthSystem>();
-            healthSystem.ReduceHealth(damage);
+            particleObj.SetActive(false);
         }
     }
+    public void OnTriggerEnter(Collider other)
+    {
+        if (other.gameObject.CompareTag("Player"))
+        {
+            HealthSystem healthSystem = other.gameObject.GetComponent<HealthSystem>();
+            healthSystem.ReduceHealth(damage);
+
+            if (particleObj != null)
+            {
+                particleObj.SetActive(true);
+            }
+            Invoke(nameof(ParticleHandler),0.8f);
+        }
+    }
+
+    public void ParticleHandler()
+    {
+        if (particleObj != null)
+        {
+            particleObj.SetActive(false);
+        }
+    }
+
 }

@@ -26,7 +26,7 @@ public class TaskManager : MonoBehaviour
     {
         tasks.Clear();
     }
-    public void FixedUpdate()
+    public void LateUpdate()
     {
         tasks.RemoveAll(task => task.isFinished);
 
@@ -138,7 +138,7 @@ public class TaskManager : MonoBehaviour
     public float CallAttack2Score()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float attack2Utility = distance <= 3.5f ? 1.0f : 0.0f;
+        float attack2Utility = distance <= 3.5f && distance > 1.9f ? 1.0f : 0.0f;
         //Debug.Log("Attack Utility Score: " + attackUtility);
         return attack2Utility;
     }

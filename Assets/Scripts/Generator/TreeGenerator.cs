@@ -11,7 +11,7 @@ public class TreeGenerator : MonoBehaviour
     [SerializeField] private float terrainSize = 150;
     //public MapGenerator mapGenerator;
 
-    public Spawner spawner;
+    //public Spawner spawner;
     //public Terrain terrain;
 
     // Start is called before the first frame update
@@ -24,24 +24,29 @@ public class TreeGenerator : MonoBehaviour
         /*        TerrainData terrainData = mapGenerator.GetTerrainData();
                 Vector3 terrainSize = terrainData.size;
         */
+        /* Terrain terrain = Terrain.activeTerrain;
+         Vector3 terrainSize = terrain.terrainData.size;*/
         Vector3 size = new Vector3(terrainSize, 0, terrainSize);
         List<Vector3> treePos = GeneratePoints(size, minDist, maxTrees, maxAttempts);
-        
 
         foreach (Vector3 originalPosition in treePos)
         {
-            Vector3 position = originalPosition;
-            Instantiate(treePrefab, position, Quaternion.identity);
-            spawner.treePositions.Add(position);
-            /*          spawner.treePositions.Add(treePos);
-                        Ray ray = new Ray(position + Vector3.up * terrainSize.y, Vector3.down);
-                        RaycastHit hit;
+            Vector3 position = new Vector3(originalPosition.x, 0, originalPosition.z);
 
-                        if (Physics.Raycast(ray, out hit, terrainSize.y, LayerMask.GetMask("Terrain")))
-                        {
-                            position = hit.point;
-                            Instantiate(treePrefab, position, Quaternion.identity);
-                        }*/
+            // Get the height at the position using Terrain.SampleHeight
+            //float terrainHeight = terrain.SampleHeight(position);
+
+            // Set the Y-coordinate of the position to the terrain height
+            //position.y = terrainHeight;
+
+            // Instantiate the tree prefab at the updated position
+            GameObject treeInstance = Instantiate(treePrefab, position, Quaternion.identity);
+
+            // Ensure the pivot point of the tree prefab is at the base of the tree
+            // You might need to adjust the tree prefab's position or pivot point to ensure accurate placement
+            // You can also add an offset value to position the tree correctly on the terrain
+            /*Vector3 treeOffset = new Vector3(0f, treeInstance.transform.localScale.y / 2f, 0f);
+            treeInstance.transform.position -= treeOffset;*/
         }
     }
 
@@ -51,7 +56,6 @@ public class TreeGenerator : MonoBehaviour
         List<Vector3> nextPoints = new List<Vector3>();
 
         float cellSize = minDist / Mathf.Sqrt(2);
-        Debug.Log("Cell Size: " + cellSize);
         int[,] grid = new int[Mathf.CeilToInt(regionSize.x / cellSize), Mathf.CeilToInt(regionSize.z / cellSize)];
 
         Vector2 spawnPoint = regionSize / 2;
@@ -99,14 +103,6 @@ public class TreeGenerator : MonoBehaviour
             int endX = Mathf.Min(blockX + 2, grid.GetLength(0) - 1);
             int originZ = Mathf.Max(0, blockZ - 2);
             int endZ = Mathf.Min(blockZ + 2, grid.GetLength(1) - 1);
-
-            Debug.Log("Candidate X: " + candidate.x);
-            Debug.Log("Block X: " + blockX);
-            Debug.Log("Block Z: " + blockZ);
-            Debug.Log("Origin X: " + originX);
-            Debug.Log("End X: " + endX);
-            Debug.Log("Origin Z: " + originZ);
-            Debug.Log("End Z: " + endZ);
             for (int x = originX; x <= endX; x++)
             {
                 for (int z = originZ; z <= endZ; z++)

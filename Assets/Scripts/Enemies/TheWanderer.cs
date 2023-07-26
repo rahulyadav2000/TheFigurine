@@ -8,13 +8,21 @@ public class TheWanderer : MonoBehaviour
 {
     [SerializeField] private float patrolRadius = 6f;
 
-
     private Vector3 startPosition;
     public Animator anim;
     public TaskManager taskManager;
     public NavMeshAgent navAgent;
     private Transform target;
     private bool isWanderer = true;
+
+    
+    public SphereCollider handCollider;
+    public SphereCollider specialAttackCollider;
+    private void Awake()
+    {
+        
+    }
+
     // Start is called before the first frame update
     void Start()
     {
@@ -23,7 +31,7 @@ public class TheWanderer : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
+    void LateUpdate()
     {
         PatrolTask patrolTask = new PatrolTask(taskManager, navAgent, PatrolPoint(), anim);
         taskManager.AddTask(patrolTask);
@@ -31,15 +39,14 @@ public class TheWanderer : MonoBehaviour
         ChaseTask chaseTask = new ChaseTask(taskManager, target, anim, navAgent);
         taskManager.AddTask(chaseTask);
 
-        AttackTask attackTask = new AttackTask(taskManager, anim, navAgent, target);
+        AttackTask attackTask = new AttackTask(taskManager, anim, navAgent, target, handCollider);
         taskManager.AddTask(attackTask);
 
-        Attack2Task attack2Task = new Attack2Task(taskManager, anim, navAgent, target);
+        Attack2Task attack2Task = new Attack2Task(taskManager, anim, navAgent, target, specialAttackCollider);
         taskManager.AddTask(attack2Task);
 
         DieTask dieTask = new DieTask(taskManager, navAgent, anim, isWanderer);
         taskManager.AddTask(dieTask);
-
     }
 
     public Vector3 PatrolPoint()

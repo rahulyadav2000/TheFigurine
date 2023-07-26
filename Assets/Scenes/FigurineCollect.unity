@@ -1079,10 +1079,6 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 353427924}
     - target: {fileID: 8438083704226007306, guid: b2d56fd4e9970d84db314328dd9ca6d4, type: 3}
-      propertyPath: enemyHealth
-      value: 
-      objectReference: {fileID: 0}
-    - target: {fileID: 8438083704226007306, guid: b2d56fd4e9970d84db314328dd9ca6d4, type: 3}
       propertyPath: arrowAmountText
       value: 
       objectReference: {fileID: 1643452515}
