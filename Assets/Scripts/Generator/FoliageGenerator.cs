@@ -24,46 +24,23 @@ public class FoliageGenerator : MonoBehaviour
         /*        TerrainData terrainData = mapGenerator.GetTerrainData();
                 Vector3 terrainSize = terrainData.size;
         */
-        Vector3 size = new Vector3(terrainSize, 0, terrainSize);
+        Vector3 size = new Vector3(terrainSize , 0, terrainSize);
         List<Vector3> treePos = GeneratePoints(size, minDist, maxTrees, maxAttempts);
         TerrainData terrainData = Terrain.activeTerrain.terrainData;
 
-        int heightmapResolution = terrainData.heightmapResolution;
+        //float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
 
         foreach (Vector3 originalPosition in treePos)
         {
-            float[,] heightmapData = terrainData.GetHeights(0, 0, heightmapResolution, heightmapResolution);
-            for (int x = 0; x < heightmapResolution; x++)
-            {
-                for (int z = 0; z < heightmapResolution; z++)
-                {
-                    // Get the height value (range: 0.0 to 1.0) at this point in the heightmap
-                    float heightValue = heightmapData[x, z];
+            // Adjust Y-coordinate based on the terrain height at the tree's position
+            /*int x = Mathf.FloorToInt(originalPosition.x / terrainSize * (terrainData.heightmapResolution - 1));
+            int z = Mathf.FloorToInt(originalPosition.z / terrainSize * (terrainData.heightmapResolution - 1));
+            float height = heightMap[x, z];
+            float terrainHeight = height * terrainData.size.y - 0.5f; */// Scale height value to match terrain height
+            Vector3 treePosition = new Vector3(originalPosition.x, Terrain.activeTerrain.SampleHeight(new Vector3(originalPosition.x, 0f, originalPosition.z)), originalPosition.z);
 
-                    // Calculate the world position for this point on the terrain
-                    float worldX = x * terrainData.size.x / heightmapResolution;
-                    float worldZ = z * terrainData.size.z / heightmapResolution;
-                    Vector3 worldPosition = Terrain.activeTerrain.transform.position + new Vector3(worldX, 0f, worldZ);
-
-                    // Get the actual height in world space by multiplying with terrain height
-                    float terrainHeight = heightValue * terrainData.size.y;
-
-                    // Now, you can spawn your tree at the correct position with the calculated terrainHeight
-                    Vector3 treePosition = new Vector3(worldPosition.x, terrainHeight, worldPosition.z);
-                    // Instantiate the tree prefab at treePosition
-                    Instantiate(treePrefab, treePosition, Quaternion.identity);
-                }
-            }
-            //spawner.treePositions.Add(position);
-            /*          spawner.treePositions.Add(treePos);
-                        Ray ray = new Ray(position + Vector3.up * terrainSize.y, Vector3.down);
-                        RaycastHit hit;
-
-                        if (Physics.Raycast(ray, out hit, terrainSize.y, LayerMask.GetMask("Terrain")))
-                        {
-                            position = hit.point;
-                            Instantiate(treePrefab, position, Quaternion.identity);
-                        }*/
+            // Spawn the treePrefab at the adjusted position
+            Instantiate(treePrefab, treePosition, Quaternion.identity);
         }
     }
 

@@ -15,12 +15,6 @@ public class TheWitcher : MonoBehaviour
         StartCoroutine(ChangePosition());
     }
 
-    // Update is called once per frame
-    public void Update()
-    {
-
-    }
-
     public IEnumerator ChangePosition()
     {
         yield return new WaitForSeconds(0.2f);
@@ -28,7 +22,7 @@ public class TheWitcher : MonoBehaviour
         CharacterController characterController = player.GetComponent<CharacterController>();
         characterController.enabled = false;
         yield return new WaitForSeconds(2f);
-        Vector3 randomPosition = new Vector3(Random.Range(0f, 150f), 0f, Random.Range(0f, 150f));
+        Vector3 randomPosition = new Vector3(Random.Range(0f, 80f), 0f, Random.Range(0f, 150f));
         player.position = randomPosition;
         characterController.enabled = true;
         Destroy(gameObject);

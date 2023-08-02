@@ -15,6 +15,9 @@ public class Player : MonoBehaviour
     public Image healthBar;
     public TMP_Text arrowAmountText;
 
+    public LayerMask ground;
+    private RaycastHit hitInfo;
+
     [SerializeField] private int figurineCount;
     private bool isFigCollected = false; 
 
@@ -40,6 +43,7 @@ public class Player : MonoBehaviour
     public bool isDead = false;
     private bool isAiming = false;
     public bool isInventoryActive { get; set; } = false;
+    public bool isGameObj { get; set; } = false;
 
     private float shootCooldown = 0.5f;
 
@@ -56,6 +60,7 @@ public class Player : MonoBehaviour
 
     public Item logItem;
     public Item plantItem;
+    public Item meatItem;
     private void Awake()
     {
         instance = this;
@@ -98,6 +103,11 @@ public class Player : MonoBehaviour
             GameData.figurineAmount = figurineCount;
             isFigCollected = false;
         }
+    }
+
+    private void LateUpdate()
+    {
+        
     }
 
     void PlayerBehaviour()
@@ -152,13 +162,24 @@ public class Player : MonoBehaviour
                 animator.SetBool("shooting", false);
             }
 
-            if(inventoryKey.IsPressed())
+            if (inventoryKey.IsPressed())
             {
                 isInventoryActive = !isInventoryActive;
+                GameManager.Instance.ToggleInventorySystem(isInventoryActive);
             }
-            
+    
 
             characterController.Move(moveInput * speed * Time.deltaTime);
+            //transform.position += Physics.gravity * Time.deltaTime; 
+
+            if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 1.8f, ground))
+            {
+                if (Physics.OverlapSphere(transform.position, 0.5f, ground))
+                {
+                    transform.position = Vector3.Lerp(transform.position, transform.position + Vector3.up * 1f, 5 * Time.deltaTime);
+                    transform.position += Physics.gravity * Time.deltaTime;
+                }
+            }
 
             Quaternion targetRotaion = Quaternion.Euler(0, camTranform.eulerAngles.y, 0);
             transform.rotation = Quaternion.Lerp(transform.rotation, targetRotaion, 6.5f * Time.deltaTime);
@@ -174,7 +195,6 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("dead", true);
             isDead = true;
-            //Invoke(nameof(TimeManager), 2.5f);
         }
 
         healthBar.fillAmount = GameData.health / 100;
@@ -185,11 +205,6 @@ public class Player : MonoBehaviour
         knifePrefab.SetActive(false);
     }
 
-/*    public void TimeManager()
-    {
-        loseSceneScreen.SetActive(true);
-        Time.timeScale = 0.0f;
-    }*/
 
     private void ShootArrow()
     {
@@ -231,7 +246,21 @@ public class Player : MonoBehaviour
 
         if(other.gameObject.tag == "EnemySpawner")
         {
-            spawner.WandererSpawner();
+            if(gameObject != null)
+            {
+                spawner.WandererSpawner();
+                isGameObj = true;
+                EnemySpawnerManager.Instance.isEnemySpanwer1 = true;
+            }
+        }
+        if(other.gameObject.tag == "E1")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                isGameObj = true;
+                EnemySpawnerManager.Instance.isEnemySpanwer1 = false;
+            }
         }
     }
 
@@ -262,6 +291,13 @@ public class Player : MonoBehaviour
                 //InventoryManager.instance.UpdatingItem();
                 Destroy(hit.gameObject);
             }
+        }
+        
+        if(hit.gameObject.CompareTag("Meat"))
+        {
+            InventoryManager.instance.AddItem(meatItem);
+            //InventoryManager.instance.UpdatingItem();
+            Destroy(hit.gameObject);
         }
     }
 }

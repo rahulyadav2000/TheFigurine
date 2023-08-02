@@ -2688,16 +2688,17 @@ MonoBehaviour:
   arrowAmountText: {fileID: 0}
   figurineCount: 0
   arrow: {fileID: 8438083704226007303}
-  hitRange: 50
+  hitRange: 30
   playerHealth: {fileID: 8438083704226007300}
+  isDead: 0
   cam: {fileID: 0}
   handArrow: {fileID: 0}
   arrowPrefab: {fileID: 4865309214770636011, guid: 45804eb2722b83845adbcf2d72da12dd, type: 3}
-  loseSceneScreen: {fileID: 0}
   knifePrefab: {fileID: 6522186618836746788}
   arrowPos: {fileID: 0}
   logItem: {fileID: 11400000, guid: 90c3a68331e3d8f408f8ecaee79a5453, type: 2}
   plantItem: {fileID: 11400000, guid: 7aa11e392cdcfb643bdfb8d09699e49b, type: 2}
+  meatItem: {fileID: 11400000, guid: 6bcc3076c01763e408a6c96503c27369, type: 2}
 --- !u!114 &8438083704226007303
 MonoBehaviour:
   m_ObjectHideFlags: 0

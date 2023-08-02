@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using Unity.AI.Navigation;
 using UnityEngine;
 
 public class TerrainGenerator : MonoBehaviour
@@ -13,6 +14,12 @@ public class TerrainGenerator : MonoBehaviour
 
     public Terrain terrain;
 
+    public NavMeshSurface navMeshSurface;
+
+    private void Awake()
+    {
+        //NavMeshBuilder();
+    }
     private void Start()
     {
         randX = Random.Range(0, width);
@@ -21,7 +28,6 @@ public class TerrainGenerator : MonoBehaviour
     private void Update()
     {
         terrain.terrainData = GenerateTerrain(terrain.terrainData);
-        
     }
 
     TerrainData GenerateTerrain(TerrainData terrainData)
@@ -50,8 +56,11 @@ public class TerrainGenerator : MonoBehaviour
 
     float CalculateHeight(int x, int y)
     {
-        float xCor = (float)x / width * scale + randX;
+/*        float xCor = (float)x / width * scale + randX;
         float yCor = (float)y / length * scale + randY;
+*/        
+        float xCor = (float)x / width * scale;
+        float yCor = (float)y / length * scale;
 
         return Mathf.PerlinNoise(xCor, yCor);
     }
@@ -59,5 +68,10 @@ public class TerrainGenerator : MonoBehaviour
     public TerrainData GetTerrainData()
     {
         return terrain.terrainData;
+    }
+
+    public void NavMeshBuilder()
+    {
+        navMeshSurface.BuildNavMesh();
     }
 }

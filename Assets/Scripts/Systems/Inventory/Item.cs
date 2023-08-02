@@ -15,7 +15,8 @@ public class Item : ScriptableObject
     public enum ItemType
     {
         LOG,
-        PLANT
+        PLANT,
+        MEAT
     }
     
     public void Use()
@@ -24,11 +25,14 @@ public class Item : ScriptableObject
         {
             case Item.ItemType.PLANT:
                 Player.instance.playerHealth.AddHealth((float)value);
-
                 break;
+
+            case Item.ItemType.MEAT:
+                Player.instance.playerHealth.AddHealth((float)value);
+                break;
+
             case Item.ItemType.LOG:
                 Player.instance.arrow.IncreaseArrowAmount(value);
-
                 break;
         }
     }

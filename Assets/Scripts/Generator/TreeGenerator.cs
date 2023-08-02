@@ -8,10 +8,10 @@ public class TreeGenerator : MonoBehaviour
     public int maxAttempts = 20;
     public float minDist = 10f;
     public int maxTrees = 40;
-    [SerializeField] private float terrainSize = 150;
+    [SerializeField] private float terrainSize;
     //public MapGenerator mapGenerator;
 
-    //public Spawner spawner;
+    public Spawner spawner;
     //public Terrain terrain;
 
     // Start is called before the first frame update
@@ -26,27 +26,14 @@ public class TreeGenerator : MonoBehaviour
         */
         /* Terrain terrain = Terrain.activeTerrain;
          Vector3 terrainSize = terrain.terrainData.size;*/
-        Vector3 size = new Vector3(terrainSize, 0, terrainSize);
+        Vector3 size = new Vector3(terrainSize -60f , 0, terrainSize);
         List<Vector3> treePos = GeneratePoints(size, minDist, maxTrees, maxAttempts);
 
         foreach (Vector3 originalPosition in treePos)
         {
             Vector3 position = new Vector3(originalPosition.x, 0, originalPosition.z);
-
-            // Get the height at the position using Terrain.SampleHeight
-            //float terrainHeight = terrain.SampleHeight(position);
-
-            // Set the Y-coordinate of the position to the terrain height
-            //position.y = terrainHeight;
-
-            // Instantiate the tree prefab at the updated position
+            spawner.treePositions.Add(position);
             GameObject treeInstance = Instantiate(treePrefab, position, Quaternion.identity);
-
-            // Ensure the pivot point of the tree prefab is at the base of the tree
-            // You might need to adjust the tree prefab's position or pivot point to ensure accurate placement
-            // You can also add an offset value to position the tree correctly on the terrain
-            /*Vector3 treeOffset = new Vector3(0f, treeInstance.transform.localScale.y / 2f, 0f);
-            treeInstance.transform.position -= treeOffset;*/
         }
     }
 

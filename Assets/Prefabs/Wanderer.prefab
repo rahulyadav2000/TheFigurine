@@ -505,7 +505,7 @@ Transform:
   - {fileID: 6132748483597886489}
   - {fileID: 3203891107347394285}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!114 &2216067820661187891
 MonoBehaviour:
@@ -559,7 +559,7 @@ NavMeshAgent:
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
-  m_StoppingDistance: 0.2
+  m_StoppingDistance: 0
   m_AutoTraverseOffMeshLink: 1
   m_AutoBraking: 1
   m_AutoRepath: 1
@@ -852,7 +852,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.37
-  m_Center: {x: 0.22, y: 0.42, z: -0.15}
+  m_Center: {x: 0.86, y: 0.54, z: 0.85}
 --- !u!114 &665930559
 MonoBehaviour:
   m_ObjectHideFlags: 0

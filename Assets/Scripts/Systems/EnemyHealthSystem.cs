@@ -4,11 +4,12 @@ using UnityEngine;
 
 public class EnemyHealthSystem : MonoBehaviour
 {
-    [SerializeField] private float maxHealth = 100.0f;
-    [SerializeField] private float currentHealth;
-
+    public float maxHealth = 100.0f;
+    public float currentHealth;
+    public static EnemyHealthSystem instance;
     private void Awake()
     {
+        instance = this;
     }
 
     // Start is called before the first frame update

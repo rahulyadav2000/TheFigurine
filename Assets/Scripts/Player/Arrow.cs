@@ -27,10 +27,6 @@ public class Arrow : MonoBehaviour
 
     public void OnCollisionEnter(Collision collision)
     {
-
-        //Debug.Log("Raycast hit: " + collision.gameObject.name);
-
-
         if (collision.gameObject.CompareTag("Wanderer"))
         {
             EnemyHealthSystem wandererHealth = collision.gameObject.GetComponent<EnemyHealthSystem>();
@@ -38,6 +34,15 @@ public class Arrow : MonoBehaviour
             {
                 wandererHealth.ReduceHealth(20);
                 Debug.Log("Wanderer Current Health: " + wandererHealth.GetHealth());
+            }
+        }
+
+        if(collision.gameObject.CompareTag("Bear"))
+        {
+            EnemyHealthSystem bearHealth = collision.gameObject.GetComponent<EnemyHealthSystem>();
+            if(bearHealth != null)
+            {
+                bearHealth.ReduceHealth(50);
             }
         }
 

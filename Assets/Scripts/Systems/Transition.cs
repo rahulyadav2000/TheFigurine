@@ -11,6 +11,7 @@ public class Transition : MonoBehaviour
         {
             //DontDestroyOnLoad(other.gameObject);
             SceneManager.LoadScene(2, LoadSceneMode.Single);
+            Destroy(gameObject, 0.5f);
         }
     }
 }

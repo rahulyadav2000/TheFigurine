@@ -41,21 +41,6 @@ public class InventoryManager : MonoBehaviour
 
     public void UpdatingItem()
     {
-
-        /*foreach (Transform item in inventoryItem)
-        {
-            Destroy(item.gameObject);
-        }
-
-        foreach (var item in items)
-        {
-            GameObject go = Instantiate(itemPrefab, inventoryItem);
-
-            var icon = go.transform.Find("Item Image").GetComponent<Image>();
-
-            icon.sprite = item.icon;
-        }*/
-
         int itemCount = items.Count;
 
         // Instantiate additional items if needed
@@ -69,7 +54,6 @@ public class InventoryManager : MonoBehaviour
 
                 icon.sprite = item.icon;
             }
-
         }
 
         for (int i = 0; i < itemCount; i++)

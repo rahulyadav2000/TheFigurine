@@ -34,7 +34,7 @@ public class TaskManager : MonoBehaviour
 
         foreach (Task task in tasks)
         {
-            if (task.taskTypes == TaskTypes.PATROL)
+            /*if (task.taskTypes == TaskTypes.PATROL)
             {
                 task.utilityScore = CallPatrolScore();
             }
@@ -53,8 +53,12 @@ public class TaskManager : MonoBehaviour
             else if(task.taskTypes == TaskTypes.DIE)
             {
                 task.utilityScore = CallDieScore();
-            }
+            }*/
+
+            UpdateTaskUtilityScore(task);
         }
+
+
 
         Task selectedTask = GetHighestUtilityTask();
 
@@ -76,6 +80,34 @@ public class TaskManager : MonoBehaviour
 
         WandererCheck();
     }
+
+    public void UpdateTaskUtilityScore(Task task)
+    {
+        switch (task.taskTypes)
+        {
+            case TaskTypes.PATROL:
+                PatrolTask patrolTask = (PatrolTask)task;
+                task.utilityScore = CallPatrolScore();
+                break;
+            case TaskTypes.ATTACK:
+                AttackTask attackTask = (AttackTask)task;
+                task.utilityScore = CallAttackScore();
+                break;
+            case TaskTypes.ATTACK2:
+                Attack2Task attack2Task = (Attack2Task)task;
+                task.utilityScore = CallAttack2Score();
+                break;
+            case TaskTypes.CHASE:
+                ChaseTask chaseTask = (ChaseTask)task;
+                task.utilityScore = CallChaseScore();
+                break;
+            case TaskTypes.DIE:
+                DieTask dieTask = (DieTask)task;
+                task.utilityScore = CallDieScore();
+                break;
+        }
+    }
+
     private Task GetHighestUtilityTask()
     {
         float highestScore = float.MinValue;
@@ -93,7 +125,8 @@ public class TaskManager : MonoBehaviour
 
     public void PerfomTask(Task task)
     {
-        switch (task.taskTypes)
+        task.StartTask();
+/*        switch (task.taskTypes)
         {
             case TaskTypes.PATROL:
                 PatrolTask patrolTask = (PatrolTask)task;
@@ -116,7 +149,7 @@ public class TaskManager : MonoBehaviour
                 dieTask.StartTask();
                 tasks.Remove(task);
                 break;
-        }
+        }*/
     }
 
     public float CallPatrolScore()
@@ -130,7 +163,7 @@ public class TaskManager : MonoBehaviour
     public float CallAttackScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float attackUtility = distance <= 1.8f ? 1.0f : 0.0f;
+        float attackUtility = distance <= 1.5f ? 1.0f : 0.0f;
         //Debug.Log("Attack Utility Score: " + attackUtility);
         return attackUtility;
     }
@@ -138,7 +171,7 @@ public class TaskManager : MonoBehaviour
     public float CallAttack2Score()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float attack2Utility = distance <= 3.5f && distance > 1.9f ? 1.0f : 0.0f;
+        float attack2Utility = distance <= 2.8f && distance > 1.9f ? 1.0f : 0.0f;
         //Debug.Log("Attack Utility Score: " + attackUtility);
         return attack2Utility;
     }
@@ -166,7 +199,6 @@ public class TaskManager : MonoBehaviour
             spawner.wandererCount++;
             Debug.Log("Wanderer Dead: " + spawner.wandererCount);
             isWandererDead = false;
-            spawner.OnEnemyDeath();
         }
     }
 }
