@@ -9,8 +9,10 @@ public class Arrow : MonoBehaviour
     public float speed;
 
     public Rigidbody rb;
+    public GameObject particle;
     private void Start()
     {
+        particle.SetActive(false);
     }
     // Update is called once per frame
     void Update()
@@ -34,6 +36,8 @@ public class Arrow : MonoBehaviour
             {
                 wandererHealth.ReduceHealth(20);
                 Debug.Log("Wanderer Current Health: " + wandererHealth.GetHealth());
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[0]);
+                particle.SetActive(true);
             }
         }
 
@@ -43,6 +47,9 @@ public class Arrow : MonoBehaviour
             if(bearHealth != null)
             {
                 bearHealth.ReduceHealth(50);
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[0]);
+                particle.SetActive(true);
+
             }
         }
 
@@ -51,8 +58,11 @@ public class Arrow : MonoBehaviour
             EnemyHealthSystem smasherHealth = collision.gameObject.GetComponent<EnemyHealthSystem>();
             if(smasherHealth != null)
             {
-                smasherHealth.ReduceHealth(50);
+                smasherHealth.ReduceHealth(5);
                 Debug.Log("Smasher Current Health: " + smasherHealth.GetHealth());
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[0]);
+                particle.SetActive(true);
+
             }
         }
 
@@ -62,6 +72,9 @@ public class Arrow : MonoBehaviour
 
             wandererHealth.ReduceHealth(100);
             Debug.Log("Killed By HeadShot!! Enemy Current Health: " + wandererHealth.GetHealth());
+            Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[0]);
+            particle.SetActive(true);
+
         }
     }
 }

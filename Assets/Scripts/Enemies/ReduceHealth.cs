@@ -6,6 +6,10 @@ public class ReduceHealth: MonoBehaviour
 {
     [SerializeField] private float damage;
     public GameObject particleObj;
+    public bool isSmasherSwipe;
+    public bool isSmasherSpecial;
+    public bool isWandererAttack;
+    public bool isWandererSpecialAttack;
     private void Start()
     {
         if(particleObj != null)
@@ -25,6 +29,27 @@ public class ReduceHealth: MonoBehaviour
                 particleObj.SetActive(true);
             }
             Invoke(nameof(ParticleHandler),0.8f);
+            Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[5]);
+
+            if(isSmasherSpecial)
+            {
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[8]);
+            }
+            
+            if(isSmasherSwipe)
+            {
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[11]);
+            }
+            
+            if(isWandererAttack)
+            {
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[10]);
+            }
+            
+            if(isWandererSpecialAttack)
+            {
+                Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[9]);
+            }
         }
     }
 

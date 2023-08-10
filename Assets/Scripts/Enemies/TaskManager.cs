@@ -155,7 +155,7 @@ public class TaskManager : MonoBehaviour
     public float CallPatrolScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float patrolUtility = distance > 7f ? 1.0f : 0.0f;
+        float patrolUtility = distance > 9f ? 1.0f : 0.0f;
         //Debug.Log("Patrol Utitliy Score: " + patrolUtility);
         return patrolUtility;
     }
@@ -171,7 +171,7 @@ public class TaskManager : MonoBehaviour
     public float CallAttack2Score()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float attack2Utility = distance <= 2.8f && distance > 1.9f ? 1.0f : 0.0f;
+        float attack2Utility = distance <= 2.8f && distance > 1.8f ? 1.0f : 0.0f;
         //Debug.Log("Attack Utility Score: " + attackUtility);
         return attack2Utility;
     }
@@ -179,7 +179,7 @@ public class TaskManager : MonoBehaviour
     public float CallChaseScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
-        float chaseUtility = distance < 7f ? 1.0f : 0.0f;
+        float chaseUtility = distance < 9f ? 1.0f : 0.0f;
         //Debug.Log("Chase Utility Score: " + chaseUtility);
         return chaseUtility;
     }

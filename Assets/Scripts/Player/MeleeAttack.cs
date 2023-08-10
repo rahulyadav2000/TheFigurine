@@ -13,7 +13,7 @@ public class MeleeAttack : MonoBehaviour
             Debug.Log("Working Collisionnnnn!");
             EnemyHealthSystem smasherHealth = other.gameObject.GetComponent<EnemyHealthSystem>();
 
-            smasherHealth.ReduceHealth(damage);
+            smasherHealth.ReduceHealth(damage - 80f);
             Debug.Log("Smasher Current Health: " + smasherHealth.GetHealth());
         }
 

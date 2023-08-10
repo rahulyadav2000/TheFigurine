@@ -16,12 +16,8 @@ public class Player : MonoBehaviour
     public TMP_Text arrowAmountText;
 
     public LayerMask ground;
-    private RaycastHit hitInfo;
-
-    [SerializeField] private int figurineCount;
-    private bool isFigCollected = false; 
-
     public ArrowSystem arrow;
+    public AudioSource source;
 
     private Vector3 moveInput;
     private Vector2 move;
@@ -32,6 +28,7 @@ public class Player : MonoBehaviour
     private InputAction shooting;
     private InputAction pickup;
     private InputAction inventoryKey;
+    private InputAction pauseMenu;
 
     private float speed = 4f;
     [SerializeField] private float hitRange;
@@ -43,14 +40,15 @@ public class Player : MonoBehaviour
     public bool isDead = false;
     private bool isAiming = false;
     public bool isInventoryActive { get; set; } = false;
+    public bool isPauseMenuActive { get; set; } = false;
     public bool isGameObj { get; set; } = false;
+    public bool isFinalFigurineCollected = false;
 
     private float shootCooldown = 0.5f;
 
     public Camera cam;
     public GameObject handArrow;
     public GameObject arrowPrefab;
-    //public GameObject loseSceneScreen;
     public GameObject knifePrefab;
 
     public Transform arrowPos;
@@ -61,6 +59,7 @@ public class Player : MonoBehaviour
     public Item logItem;
     public Item plantItem;
     public Item meatItem;
+
     private void Awake()
     {
         instance = this;
@@ -68,7 +67,6 @@ public class Player : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        //loseSceneScreen.SetActive(false);
         movement = inputs.actions["Movement"];
         attack = inputs.actions["Attack"];
         run = inputs.actions["Run"];
@@ -76,6 +74,7 @@ public class Player : MonoBehaviour
         shooting = inputs.actions["Shooting"];
         pickup = inputs.actions["Pickup"];
         inventoryKey = inputs.actions["Inventory"];
+        pauseMenu = inputs.actions["PauseMenu"];
 
 
         camTranform = Camera.main.transform;
@@ -86,7 +85,6 @@ public class Player : MonoBehaviour
 
         spawner = Spawner.instance;
 
-        figurineCount = GameData.figurineAmount;
     }
 
     // Update is called once per frame
@@ -96,18 +94,11 @@ public class Player : MonoBehaviour
         HealthResponse();
         arrowAmountText.text = "Ammo: " + GameData.arrow.ToString();
         
-
-        if(isFigCollected)
-        {
-            figurineCount++;
-            GameData.figurineAmount = figurineCount;
-            isFigCollected = false;
-        }
     }
 
     private void LateUpdate()
     {
-        
+
     }
 
     void PlayerBehaviour()
@@ -124,11 +115,14 @@ public class Player : MonoBehaviour
                 isRunning = true;
                 animator.SetBool("run", isRunning);
                 speed = 6f;
+                //source.loop = true;
             }
             else
             {
                 animator.SetBool("run", false);
                 speed = 3f;
+                isRunning = false;
+                //source.loop = false;
             }
 
             if (attack.IsPressed())
@@ -139,8 +133,10 @@ public class Player : MonoBehaviour
                 speed = 0.0f;
                 characterController.Move(Vector3.zero);
                 Invoke(nameof(KnifeActivator), 1.5f);
+                source.PlayOneShot(AudioManager.instance.audioClip[3]);
+
             }
-          
+
 
             if (aiming.IsPressed() && arrow.GetArrowAmount() > 0)
             {
@@ -167,17 +163,24 @@ public class Player : MonoBehaviour
                 isInventoryActive = !isInventoryActive;
                 GameManager.Instance.ToggleInventorySystem(isInventoryActive);
             }
-    
+
+            if(pauseMenu.IsPressed())
+            {
+                isPauseMenuActive = !isPauseMenuActive;
+                GameManager.Instance.TogglePauseMenu(isPauseMenuActive);
+            }
+
 
             characterController.Move(moveInput * speed * Time.deltaTime);
-            //transform.position += Physics.gravity * Time.deltaTime; 
 
-            if (Physics.Raycast(transform.position, Vector3.down, out hitInfo, 1.8f, ground))
+            RaycastHit hit;
+
+            if (Physics.Raycast(transform.position + Vector3.up * 0.1f, Vector3.down, out hit, 2f))
             {
-                if (Physics.OverlapSphere(transform.position, 0.5f, ground))
+                if (hit.collider.gameObject.layer == LayerMask.NameToLayer("Terrain"))
                 {
-                    transform.position = Vector3.Lerp(transform.position, transform.position + Vector3.up * 1f, 5 * Time.deltaTime);
-                    transform.position += Physics.gravity * Time.deltaTime;
+                    Vector3 newPosition = new Vector3(transform.position.x, hit.point.y, transform.position.z);
+                    characterController.Move(newPosition - transform.position);
                 }
             }
 
@@ -195,9 +198,16 @@ public class Player : MonoBehaviour
         {
             animator.SetBool("dead", true);
             isDead = true;
+            Invoke(nameof(LoseScreenLoader), 2.5f);
         }
 
         healthBar.fillAmount = GameData.health / 100;
+    }
+
+
+    public void LoseScreenLoader()
+    {
+        GameManager.Instance.LoseScreenEnabler();
     }
 
     public void KnifeActivator()
@@ -218,6 +228,7 @@ public class Player : MonoBehaviour
         {
             GameObject arrowSpawn = GameObject.Instantiate(arrowPrefab, arrowPos.position, arrowPos.rotation) as GameObject;
             arrowSpawn.GetComponent<Arrow>().setTarget(hit.point);
+            source.PlayOneShot(AudioManager.instance.audioClip[1]);
             arrow.ReduceArrowAmount();
             //GameData.arrow = arrow.GetArrowAmount();
             Debug.Log("Arrow Amount: " + arrow.GetArrowAmount());
@@ -249,36 +260,105 @@ public class Player : MonoBehaviour
             if(gameObject != null)
             {
                 spawner.WandererSpawner();
-                isGameObj = true;
+                //isGameObj = true;
                 EnemySpawnerManager.Instance.isEnemySpanwer1 = true;
             }
         }
+
         if(other.gameObject.tag == "E1")
         {
             if (gameObject != null)
             {
                 spawner.WandererSpawner();
-                isGameObj = true;
+                //isGameObj = true;
                 EnemySpawnerManager.Instance.isEnemySpanwer1 = false;
+            }
+        }
+        
+        if(other.gameObject.tag == "E2")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                //isGameObj = true;
+                EnemySpawnerManager.Instance.isEnemySpanwer2 = true;
+            }
+        }
+        
+        if(other.gameObject.tag == "E3")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                //isGameObj = true;
+                EnemySpawnerManager.Instance.isEnemySpanwer2 = false;
+            }
+        }
+        
+        if(other.gameObject.tag == "E4")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                EnemySpawnerManager.Instance.isEnemySpanwer3 = true;
+            }
+        }
+        
+        if(other.gameObject.tag == "E5")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                EnemySpawnerManager.Instance.isEnemySpanwer4 = true;
+            }
+        }
+        
+        if(other.gameObject.tag == "E6")
+        {
+            if (gameObject != null)
+            {
+                spawner.WandererSpawner();
+                EnemySpawnerManager.Instance.isEnemySpanwer4 = false;
             }
         }
     }
 
     private void OnControllerColliderHit(ControllerColliderHit hit)
     {
-        if(hit.gameObject.CompareTag("Figurine"))
+        if (hit.gameObject.CompareTag("Figurine"))
         {
-            Debug.Log("Workinggg");
-            Destroy(hit.gameObject);
-            isFigCollected = true;
+            if (gameObject != null)
+            {
+                Spawner.instance.figurineIndex++;
+                GameData.figurineAmount = Spawner.instance.figurineIndex;
+                if (Spawner.instance.figurineIndex < Spawner.instance.figurines.Length)
+                {
+                    Destroy(hit.gameObject);
+                    Spawner.instance.FigurineHandler();
+                }
+
+                if(Spawner.instance.figurineIndex >= 4)
+                {
+                    Destroy(hit.gameObject);
+                }
+            }
         }
 
-        if(hit.gameObject.CompareTag("Ammo"))
+        if(hit.gameObject.CompareTag("FF"))
+        {
+            if(gameObject != null)
+            {
+                isFinalFigurineCollected = true;
+                Destroy(hit.gameObject);
+            }
+        }
+
+        if (hit.gameObject.CompareTag("Ammo"))
         {
             if(pickup.IsPressed())
             {
                 InventoryManager.instance.AddItem(logItem);
-                //InventoryManager.instance.UpdatingItem();
+                source.PlayOneShot(AudioManager.instance.audioClip[4]);
                 Destroy(hit.gameObject);
             }
         }
@@ -288,7 +368,7 @@ public class Player : MonoBehaviour
             if(pickup.IsPressed())
             {
                 InventoryManager.instance.AddItem(plantItem);
-                //InventoryManager.instance.UpdatingItem();
+                source.PlayOneShot(AudioManager.instance.audioClip[2]);
                 Destroy(hit.gameObject);
             }
         }
@@ -296,7 +376,7 @@ public class Player : MonoBehaviour
         if(hit.gameObject.CompareTag("Meat"))
         {
             InventoryManager.instance.AddItem(meatItem);
-            //InventoryManager.instance.UpdatingItem();
+            source.PlayOneShot(AudioManager.instance.audioClip[2]); 
             Destroy(hit.gameObject);
         }
     }

@@ -18,7 +18,7 @@ public class TerrainGenerator : MonoBehaviour
 
     private void Awake()
     {
-        //NavMeshBuilder();
+        NavMeshBuilder();
     }
     private void Start()
     {

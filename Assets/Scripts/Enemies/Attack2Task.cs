@@ -42,13 +42,13 @@ public class Attack2Task : Task
         animator.SetBool("specialAttack", true); 
         animator.SetBool("attack", false);
 
-        yield return new WaitForSeconds(2.7f);
+        yield return new WaitForSeconds(3.2f);
         sphereCollider.enabled = true;
         yield return new WaitForSeconds(0.8f);
         sphereCollider.enabled= false;
 
         FinishTask();
-        yield return new WaitForSeconds(2.5f);
+        yield return new WaitForSeconds(1.5f);
     }
 }
 

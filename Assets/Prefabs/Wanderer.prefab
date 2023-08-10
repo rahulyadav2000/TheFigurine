@@ -851,7 +851,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.37
+  m_Radius: 0.6
   m_Center: {x: 0.86, y: 0.54, z: 0.85}
 --- !u!114 &665930559
 MonoBehaviour:
@@ -867,6 +867,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 30
   particleObj: {fileID: 1559638048}
+  isSmasherSwipe: 0
+  isSmasherSpecial: 0
+  isWandererAttack: 0
+  isWandererSpecialAttack: 1
 --- !u!1 &2369046709720915780
 GameObject:
   m_ObjectHideFlags: 0
@@ -1820,6 +1824,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 10
   particleObj: {fileID: 2108671193}
+  isSmasherSwipe: 0
+  isSmasherSpecial: 0
+  isWandererAttack: 1
+  isWandererSpecialAttack: 0
 --- !u!1 &4405224827327867032
 GameObject:
   m_ObjectHideFlags: 0

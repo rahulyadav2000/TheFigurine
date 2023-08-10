@@ -34,7 +34,7 @@ Transform:
   m_ConstrainProportionsScale: 0
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 11
+  m_RootOrder: 10
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!218 &1223088011939314738
 Terrain:
@@ -61,7 +61,7 @@ Terrain:
   m_DrawTreesAndFoliage: 1
   m_StaticShadowCaster: 0
   m_ReflectionProbeUsage: 1
-  m_MaterialTemplate: {fileID: 2100000, guid: d364ba8546760304c809c5cffaf34bd3, type: 2}
+  m_MaterialTemplate: {fileID: 2100000, guid: 5d8af8f434f69794eabd684fb44b4fbf, type: 2}
   m_BakeLightProbesForTrees: 1
   m_PreserveTreePrototypeLayers: 0
   m_DeringLightProbesForTrees: 1
@@ -95,7 +95,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   treePrefab: {fileID: 4880792300369257229, guid: 9f5fff866413c234cb82b39cd38fcb9a, type: 3}
   maxAttempts: 20
-  minDist: 10
+  minDist: 8
   maxTrees: 1000
   terrainSize: 256
   terrain: {fileID: 1223088011939314738}
@@ -111,7 +111,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 0f13a098d7728a24f830303f0947ed71, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  height: 2
+  height: 4
   width: 257
   length: 257
   scale: 20
@@ -147,5 +147,5 @@ MonoBehaviour:
   m_OverrideVoxelSize: 0
   m_VoxelSize: 0.16666667
   m_MinRegionArea: 2
-  m_NavMeshData: {fileID: 23800000, guid: b9183b2de07cd4f4896666a11c7dfef6, type: 2}
+  m_NavMeshData: {fileID: 23800000, guid: 5ef2b809baafe624aac83cdaa336ac8e, type: 2}
   m_BuildHeightMesh: 0

@@ -8,6 +8,20 @@ TagManager:
   - Enemy
   - Wanderer
   - Smasher
+  - E1
+  - EnemySpawner
+  - E3
+  - E4
+  - E2
+  - WinScene
+  - Figurine
+  - Ammo
+  - Bear
+  - Health
+  - SceneChanger
+  - Meat
+  - E5
+  - E6
   layers:
   - Default
   - TransparentFX
@@ -16,7 +30,7 @@ TagManager:
   - Water
   - UI
   - Terrain
-  - 
+  - minimap
   - 
   - 
   - 

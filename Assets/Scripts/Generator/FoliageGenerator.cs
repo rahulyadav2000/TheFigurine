@@ -9,9 +9,7 @@ public class FoliageGenerator : MonoBehaviour
     public float minDist = 10f;
     public int maxTrees = 40;
     [SerializeField] private float terrainSize = 150;
-    //public MapGenerator mapGenerator;
 
-    //public Spawner spawner;
     public Terrain terrain;
 
     // Start is called before the first frame update
@@ -21,25 +19,16 @@ public class FoliageGenerator : MonoBehaviour
     }
     private void GenerateTrees()
     {
-        /*        TerrainData terrainData = mapGenerator.GetTerrainData();
-                Vector3 terrainSize = terrainData.size;
-        */
         Vector3 size = new Vector3(terrainSize , 0, terrainSize);
         List<Vector3> treePos = GeneratePoints(size, minDist, maxTrees, maxAttempts);
         TerrainData terrainData = Terrain.activeTerrain.terrainData;
 
-        //float[,] heightMap = terrainData.GetHeights(0, 0, terrainData.heightmapResolution, terrainData.heightmapResolution);
-
         foreach (Vector3 originalPosition in treePos)
         {
-            // Adjust Y-coordinate based on the terrain height at the tree's position
-            /*int x = Mathf.FloorToInt(originalPosition.x / terrainSize * (terrainData.heightmapResolution - 1));
-            int z = Mathf.FloorToInt(originalPosition.z / terrainSize * (terrainData.heightmapResolution - 1));
-            float height = heightMap[x, z];
-            float terrainHeight = height * terrainData.size.y - 0.5f; */// Scale height value to match terrain height
-            Vector3 treePosition = new Vector3(originalPosition.x, Terrain.activeTerrain.SampleHeight(new Vector3(originalPosition.x, 0f, originalPosition.z)), originalPosition.z);
+            Vector3 treePosition = new Vector3(originalPosition.x, 
+                Terrain.activeTerrain.SampleHeight(new Vector3(originalPosition.x, 0f, originalPosition.z)), 
+                originalPosition.z);
 
-            // Spawn the treePrefab at the adjusted position
             Instantiate(treePrefab, treePosition, Quaternion.identity);
         }
     }
@@ -70,13 +59,13 @@ public class FoliageGenerator : MonoBehaviour
                 float angle = Random.value * Mathf.PI * 2;
 
                 Vector3 dir = new Vector3(Mathf.Sin(angle), 0, Mathf.Cos(angle));
-                Vector3 candidate = spawnCentre + dir * Random.Range(minDist, 2 * minDist);
+                Vector3 individualPoint = spawnCentre + dir * Random.Range(minDist, 2 * minDist);
 
-                if (AcceptablePos(candidate, regionSize, cellSize, minDist, samples, grid))
+                if (AcceptablePos(individualPoint, regionSize, cellSize, minDist, samples, grid))
                 {
-                    samples.Add(candidate);
-                    nextPoints.Add(candidate);
-                    grid[Mathf.FloorToInt(candidate.x / cellSize), Mathf.FloorToInt(candidate.z / cellSize)] = samples.Count;
+                    samples.Add(individualPoint);
+                    nextPoints.Add(individualPoint);
+                    grid[Mathf.FloorToInt(individualPoint.x / cellSize), Mathf.FloorToInt(individualPoint.z / cellSize)] = samples.Count;
                     acceptedPoint = true;
                     break;
                 }
@@ -88,11 +77,11 @@ public class FoliageGenerator : MonoBehaviour
         return samples;
     }
 
-    private bool AcceptablePos(Vector3 candidate, Vector3 regionSize, float cellSize, float minDis, List<Vector3> samples, int[,] grid){
+    private bool AcceptablePos(Vector3 individualPoint, Vector3 regionSize, float cellSize, float minDis, List<Vector3> samples, int[,] grid){
         
-        if(candidate.x > 0 && candidate.x < regionSize.x && candidate.z > 0 && candidate.z < regionSize.z){
-            int blockX = Mathf.FloorToInt(candidate.x / cellSize);
-            int blockZ = Mathf.FloorToInt(candidate.z / cellSize);
+        if(individualPoint.x > 0 && individualPoint.x < regionSize.x && individualPoint.z > 0 && individualPoint.z < regionSize.z){
+            int blockX = Mathf.FloorToInt(individualPoint.x / cellSize);
+            int blockZ = Mathf.FloorToInt(individualPoint.z / cellSize);
             int originX = Mathf.Max(0, blockX - 2);
             int endX = Mathf.Min(blockX + 2, grid.GetLength(0) - 1);
             int originZ = Mathf.Max(0, blockZ - 2);
@@ -104,7 +93,7 @@ public class FoliageGenerator : MonoBehaviour
                     int sampleIndex = grid[x, z] - 1;
                     if (sampleIndex != -1)
                     {
-                        float sqrDistance = (candidate - samples[sampleIndex]).sqrMagnitude;
+                        float sqrDistance = (individualPoint - samples[sampleIndex]).sqrMagnitude;
                         if (sqrDistance < minDis* minDis)
                         {
                             return false;

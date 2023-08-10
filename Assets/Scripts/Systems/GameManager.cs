@@ -7,12 +7,10 @@ using UnityEngine.UI;
 public class GameManager : MonoBehaviour
 {
     public static GameManager Instance;
-    private GameObject winScene;
-    public GameObject loseScreen;
-    public bool isWinning;
-    public bool isLoseScreen;
-
     public GameObject inventoryUI;
+    public GameObject pauseMenu;
+    public GameObject optionsMenu;
+    public bool isWinning;
 
     private void Awake()
     {
@@ -20,29 +18,20 @@ public class GameManager : MonoBehaviour
     }
     private void Start()
     {
-        if(isWinning)
-        {
-            winScene = GameObject.FindGameObjectWithTag("WinScene");
-        }
-        if(winScene != null)
-            winScene.SetActive(false);
-
         if(inventoryUI  != null) 
             inventoryUI.SetActive(false);
-        if(loseScreen != null)
-            loseScreen.SetActive(false);
+        if(pauseMenu != null) 
+            pauseMenu.SetActive(false);
+
+        if(optionsMenu != null) 
+            optionsMenu.SetActive(false);
     }
 
     private void Update()
     {
-        WinningState();
-
-        if(isLoseScreen)
+        if(isWinning)
         {
-            if (Player.instance.isDead)
-            {
-                Invoke(nameof(LoseScreenEnabler), 2.5f);
-            }
+            WinningState();
         }
     }
 
@@ -55,7 +44,7 @@ public class GameManager : MonoBehaviour
     }
     public void StartGame()
     {
-        SceneManager.LoadScene(1, LoadSceneMode.Single);
+        SceneManager.LoadScene(1);
     }
 
     public void QuitGame()
@@ -65,30 +54,53 @@ public class GameManager : MonoBehaviour
 
     public void WinningState()
     {
-        if(GameData.figurineAmount == 1 && isWinning)
+        if(Player.instance.isFinalFigurineCollected)
         {
-            winScene.SetActive(true);
-            Time.timeScale = 0;
-        }
-        else
-        {
-            Time.timeScale = 1f;
+            SceneManager.LoadScene(3);
         }
     }
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0, LoadSceneMode.Single);
+        SceneManager.LoadScene(0);
         Time.timeScale = 1f;
         GameData.health = 100;
     }
 
     public void LoseScreenEnabler()
     {
-        if(loseScreen != null)
+        SceneManager.LoadScene(4);
+    }
+
+    public void MenuScreen()
+    {
+        SceneManager.LoadScene(0);
+    }
+
+    public void Resume()
+    {
+        pauseMenu.SetActive(false);
+        Time.timeScale = 1f;
+    }
+
+    public void TogglePauseMenu(bool isActive)
+    {
+        if(pauseMenu != null)
         {
-            loseScreen.SetActive(true);
-            Time.timeScale = 0;
+            pauseMenu.SetActive(isActive);
+            Time.timeScale = 0.0f;
+        }
+        if(!isActive)
+        {
+            Time.timeScale = 1.0f;
+        }
+    }
+
+    public void OptionMenu()
+    {
+        if(optionsMenu != null)
+        {
+            optionsMenu.SetActive(true);
         }
     }
 }

@@ -9,10 +9,16 @@ EditorBuildSettings:
     path: Assets/Scenes/StartScene.unity
     guid: e8403cb74505cc744af859324d33be79
   - enabled: 1
-    path: Assets/Scenes/SampleScene.unity
+    path: Assets/Scenes/MainScene.unity
     guid: 9fc0d4010bbf28b4594072e72b8655ab
   - enabled: 1
     path: Assets/Scenes/FigurineCollect.unity
     guid: 3481e87bfcb1a174cba6eec87a26abf5
+  - enabled: 1
+    path: Assets/Scenes/WinScene.unity
+    guid: 3df74dbdaf83f9d458719709c56471bc
+  - enabled: 1
+    path: Assets/Scenes/LoseScene.unity
+    guid: f263746ead3f1dc469aa394de5ae67ed
   m_configObjects:
     com.unity.input.settings: {fileID: 11400000, guid: 4b2902d45fcb3b04c8f35c8b9ef01067, type: 2}

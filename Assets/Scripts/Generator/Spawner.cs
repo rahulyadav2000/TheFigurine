@@ -6,32 +6,31 @@ using UnityEngine;
 public class Spawner : MonoBehaviour
 {
     public static Spawner instance;
-    [SerializeField] private int noOfSmashers = 4;
     [SerializeField] private int noOfAmmoPrefab;
     [SerializeField] private int noOfBears;
     [SerializeField] private int noOfHealtPickupPrefab;
     [SerializeField] private int wandererPresent;
     [SerializeField] private int range;
 
-    public LayerMask groundLayer;
 
     public int wandererCount = 0;
 
-    [SerializeField] private int groupSize = 2;
+    private int groupSize;
 
     public GameObject ammoPrefab;
     public GameObject bearPrefab;
     public GameObject healthPickupPrefab;
-    public GameObject smasherPrefab;
     public GameObject wandererPrefab;
     public GameObject witcherPrefab;
-    public GameObject chestPrefab;
     public GameObject doorPortal;
     private GameObject[] wanderer;
 
+    public GameObject[] figurines;
+    public int figurineIndex = 0; 
+
     public bool isWitcher = false;
-    public bool isSmasher = false;
     public bool isBear = false;
+    public bool isPortal = false;
     public bool isDeath{ get; set; }
 
     private Transform player;
@@ -53,10 +52,6 @@ public class Spawner : MonoBehaviour
         isDeath = false;
         player = GameObject.FindGameObjectWithTag("Player").transform;
 
-        if(isSmasher)
-            SmasherSpawner();
-            ChestSpawner();
-
 
         if(isWitcher)
             StartCoroutine(WitcherSpawner());
@@ -69,6 +64,9 @@ public class Spawner : MonoBehaviour
 
         AmmoSpawner();
         HealthPickupSpawner();
+        FigurineHandler();
+
+        figurineIndex = GameData.figurineAmount;
     }
 
     // Update is called once per frame
@@ -77,16 +75,6 @@ public class Spawner : MonoBehaviour
         PortalSpawner();
     }
 
-    public void ChestSpawner()
-    {
-        GameObject[] smashers = GameObject.FindGameObjectsWithTag("Smasher");
-
-        for (int i = 0; i < smashers.Length; i++)
-        {
-            Vector3 spawnPos = smashers[i].transform.position + new Vector3(5f, 0f, 5f);
-            Instantiate(chestPrefab, spawnPos, Quaternion.identity);
-        }
-    }
 
     public void AmmoSpawner()
     {
@@ -98,14 +86,15 @@ public class Spawner : MonoBehaviour
             while(!validPos)
             {
                
-                ammoPos = new Vector3(Random.Range(10, 85), 0f, Random.Range(10, 120));
+                ammoPos = new Vector3(Random.Range(10, 240), 0f, Random.Range(10, 240));
 
                 if(!IsPositionNearTree(ammoPos))
                 {
                     validPos = true;
                     GameObject go = Instantiate(ammoPrefab, ammoPos, Quaternion.identity);
-                    go.transform.position = new Vector3(go.transform.position.x, Terrain.activeTerrain.SampleHeight(new Vector3(go.transform.position.x
-                        , 0f, go.transform.position.z)) , go.transform.position.z);
+                    go.transform.position = new Vector3(go.transform.position.x, 
+                        Terrain.activeTerrain.SampleHeight(new Vector3(go.transform.position.x,0f, go.transform.position.z)),
+                        go.transform.position.z);
                 }
             }
         }
@@ -121,7 +110,7 @@ public class Spawner : MonoBehaviour
 
             while(!validPos)
             {
-                bearPos = new Vector3(Random.Range(10, 85), 0f, Random.Range(10, 120));
+                bearPos = new Vector3(Random.Range(10, 240), 0f, Random.Range(10, 240));
 
                 if(!IsPositionNearTree(bearPos))
                 {
@@ -144,7 +133,7 @@ public class Spawner : MonoBehaviour
 
             while(!validPos)
             {
-                healthPickupPos = new Vector3(Random.Range(10, 85), 0f, Random.Range(10, 120));
+                healthPickupPos = new Vector3(Random.Range(10, 240), 0f, Random.Range(10, 240));
 
                 if(!IsPositionNearTree(healthPickupPos))
                 {
@@ -157,44 +146,25 @@ public class Spawner : MonoBehaviour
         }
     }
 
-    public void SmasherSpawner()
-    {
-        for (int i = 0; i < noOfSmashers; i++)
-        {
-            Vector3 spawnEnemyPos;
-            bool validPosition = false;
-
-            while (!validPosition)
-            {
-                spawnEnemyPos = new Vector3(Random.Range(0, range - 60), 0f, Random.Range(0, range));
-
-                if (!IsPositionNearTree(spawnEnemyPos) && !IsPositionNearSmasher(spawnEnemyPos))
-                {
-                    validPosition = true;
-                    Instantiate(smasherPrefab, spawnEnemyPos, Quaternion.identity);
-                }
-            }
-        }
-    }
 
     public void WandererSpawner()
     {
+        groupSize = Random.Range(2, 6);
         for(int i = 0; i < groupSize; i++)
         {
             GameObject wanderer = objPool.GetPooledObj();
-            wanderer.GetComponent<EnemyHealthSystem>().currentHealth = 100;
             if (wanderer == null) return;
 
             if(wanderer != null)
             {
+                wanderer.GetComponent<EnemyHealthSystem>().currentHealth = 100;
                 Vector3 playerPos = GameObject.Find("Tori").transform.position;
-                
 
-                float distanceFromPlayer = 25f;
-                float angleFromPlayer = Random.Range(-60f, 60f);
+                float distanceFromPlayer = 22f;
+                float angleFromPlayer = Random.Range(-30f, 30f);
 
                 Vector3 spawnOffset = Quaternion.Euler(0f, angleFromPlayer, 0f) * Vector3.forward * distanceFromPlayer;
-                playerPos = new Vector3(Mathf.Clamp(playerPos.x, 0f, 70f), 0f, Mathf.Clamp(playerPos.z, 0f, 130f));
+                playerPos = new Vector3(Mathf.Clamp(playerPos.x, 0f, 240f), 0f, Mathf.Clamp(playerPos.z, 0f, 240f));
 
                 wanderer.transform.position = playerPos + spawnOffset;
                 wanderer.SetActive(true);
@@ -236,23 +206,26 @@ public class Spawner : MonoBehaviour
         return false;
     }
     
-    private bool IsPositionNearSmasher(Vector3 position)
-    {
-        foreach (Vector3 smasherPos in smasherPositions)
-        {
-            if (Vector3.Distance(position, smasherPos) < 50f) 
-                return true;
-        }
-        return false;
-    }
 
     public void PortalSpawner()
     {
-        if(wandererCount == 5)
+        for(int i = 0; i < 1; i++)
         {
-            Vector3 pos = new Vector3(85, 0, 145);
-            Instantiate(doorPortal, pos, Quaternion.identity);
-            wandererCount = 0;
+            if (figurineIndex == 3 && !isPortal)
+            {
+                Vector3 pos = new Vector3(220f, 2f, 220f);
+                Instantiate(doorPortal, pos, Quaternion.identity);
+                isPortal = true;
+
+            }
         }
+
+    }
+
+    public void FigurineHandler()
+    {
+        figurines[figurineIndex].SetActive(true);
+        Debug.Log(figurineIndex);
+        
     }
 }

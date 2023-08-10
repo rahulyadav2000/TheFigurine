@@ -60,6 +60,10 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   damage: 50
   particleObj: {fileID: 1771600238}
+  isSmasherSwipe: 0
+  isSmasherSpecial: 0
+  isWandererAttack: 0
+  isWandererSpecialAttack: 0
 --- !u!1 &269341469479855900
 GameObject:
   m_ObjectHideFlags: 0
@@ -412,7 +416,7 @@ Transform:
   - {fileID: 5890514952438456844}
   - {fileID: 244061311445409438}
   m_Father: {fileID: 0}
-  m_RootOrder: 17
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!195 &2156945973932638878
 NavMeshAgent:
@@ -424,7 +428,7 @@ NavMeshAgent:
   m_Enabled: 1
   m_AgentTypeID: 0
   m_Radius: 0.5
-  m_Speed: 3.5
+  m_Speed: 4
   m_Acceleration: 8
   avoidancePriority: 50
   m_AngularSpeed: 120
@@ -462,7 +466,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 8f5d9eeb8f6178e48bea31a1c4b42419, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  patrolRadius: 6
+  patrolRadius: 20
   anim: {fileID: 2156945973932638875}
   taskManager: {fileID: 2156945973932638877}
   navAgent: {fileID: 2156945973932638878}
@@ -689,7 +693,7 @@ SphereCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Radius: 0.1
+  m_Radius: 0.28
   m_Center: {x: 0.054335937, y: 0.4144245, z: 0.00000020158417}
 --- !u!114 &6906128513350445152
 MonoBehaviour:
@@ -703,8 +707,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f749062915788c42b5ee1a652effce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 25
+  damage: 15
   particleObj: {fileID: 1308848543}
+  isSmasherSwipe: 1
+  isSmasherSpecial: 0
+  isWandererAttack: 0
+  isWandererSpecialAttack: 0
 --- !u!1 &2864612696804562910
 GameObject:
   m_ObjectHideFlags: 0
@@ -1105,7 +1113,7 @@ SphereCollider:
   m_Enabled: 1
   serializedVersion: 2
   m_Radius: 0.41
-  m_Center: {x: 0, y: 0.24, z: 0.26}
+  m_Center: {x: -0.07, y: -0.29, z: -0.69}
 --- !u!114 &435854367
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1118,8 +1126,12 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3f749062915788c42b5ee1a652effce3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  damage: 50
+  damage: 30
   particleObj: {fileID: 1771600238}
+  isSmasherSwipe: 0
+  isSmasherSpecial: 1
+  isWandererAttack: 0
+  isWandererSpecialAttack: 0
 --- !u!1 &5714924244320948728
 GameObject:
   m_ObjectHideFlags: 0
@@ -1823,6 +1835,31 @@ PrefabInstance:
     m_RemovedComponents: []
     m_AddedGameObjects: []
   m_SourcePrefab: {fileID: 100100000, guid: 96536afb634b32043bb988d4576053d3, type: 3}
+--- !u!1 &1771600224 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100010, guid: 96536afb634b32043bb988d4576053d3, type: 3}
+  m_PrefabInstance: {fileID: 1771700170}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &469691439
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1771600224}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 474bcb49853aa07438625e644c072ee6, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  m_Version: 1
+  m_UsePipelineSettings: 1
+  m_AdditionalLightsShadowResolutionTier: 2
+  m_LightLayerMask: 1
+  m_CustomShadowLayers: 0
+  m_ShadowLayerMask: 1
+  m_LightCookieSize: {x: 1, y: 1}
+  m_LightCookieOffset: {x: 0, y: 0}
 --- !u!1 &1771600238 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 100004, guid: 96536afb634b32043bb988d4576053d3, type: 3}

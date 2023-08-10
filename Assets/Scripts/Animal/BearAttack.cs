@@ -12,6 +12,8 @@ public class BearAttack : MonoBehaviour
         {
             HealthSystem healthSystem = other.gameObject.GetComponent<HealthSystem>();
             healthSystem.ReduceHealth(damage);
+            Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[5]);
+            Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[7]);
         }
     }
 }
