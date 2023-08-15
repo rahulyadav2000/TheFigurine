@@ -89,18 +89,27 @@ public class TaskManager : MonoBehaviour
                 PatrolTask patrolTask = (PatrolTask)task;
                 task.utilityScore = CallPatrolScore();
                 break;
+
             case TaskTypes.ATTACK:
                 AttackTask attackTask = (AttackTask)task;
                 task.utilityScore = CallAttackScore();
                 break;
+
+            case TaskTypes.MULTIATTACK:
+                MultiAttackTask multiAttackTask = (MultiAttackTask)task;
+                task.utilityScore = CallMultiAttackScore();
+                break;
+
             case TaskTypes.ATTACK2:
                 Attack2Task attack2Task = (Attack2Task)task;
                 task.utilityScore = CallAttack2Score();
                 break;
+
             case TaskTypes.CHASE:
                 ChaseTask chaseTask = (ChaseTask)task;
                 task.utilityScore = CallChaseScore();
                 break;
+
             case TaskTypes.DIE:
                 DieTask dieTask = (DieTask)task;
                 task.utilityScore = CallDieScore();
@@ -174,6 +183,14 @@ public class TaskManager : MonoBehaviour
         float attack2Utility = distance <= 2.8f && distance > 1.8f ? 1.0f : 0.0f;
         //Debug.Log("Attack Utility Score: " + attackUtility);
         return attack2Utility;
+    }
+    
+    public float CallMultiAttackScore()
+    {
+        float distance = Vector3.Distance(transform.position, player.position);
+        float multiAttackUtility = distance <= 2.3f && distance > 1f ? 1.0f : 0.0f;
+        //Debug.Log("Attack Utility Score: " + attackUtility);
+        return multiAttackUtility;
     }
 
     public float CallChaseScore()

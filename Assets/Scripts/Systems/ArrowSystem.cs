@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class ArrowSystem : MonoBehaviour
 {
-    [SerializeField] private int arrowAmount;
+    [SerializeField] public int arrowAmount;
 
     private void Start()
     {

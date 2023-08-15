@@ -9,6 +9,7 @@ public class Task
         PATROL,
         ATTACK,
         ATTACK2,
+        MULTIATTACK,
         CHASE,
         DIE
     }

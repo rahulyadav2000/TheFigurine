@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using UnityEditor.VersionControl;
 using UnityEngine;
 using UnityEngine.AI;
 
@@ -45,8 +44,6 @@ public class AttackTask : Task
         armCollider.enabled = false;
 
         FinishTask();
-
-        
     }
 
 }

@@ -5,11 +5,19 @@ using UnityEngine;
 public class AudioManager : MonoBehaviour
 {
     public static AudioManager instance;
-    //public AudioSource audioSource;
+    public AudioSource audioSource;
     public AudioClip[] audioClip;
 
     private void Awake()
     {
         instance = this;
+    }
+
+    public void ButtonPressSound(int index)
+    {
+        if (audioSource != null)
+        {
+            audioSource.PlayOneShot(audioClip[index]);
+        }
     }
 }

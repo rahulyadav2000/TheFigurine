@@ -1,5 +1,4 @@
 using System.Collections;
-using System.Collections.Generic;
 using UnityEngine.InputSystem;
 using UnityEngine.UI;
 using UnityEngine;
@@ -230,7 +229,6 @@ public class Player : MonoBehaviour
             arrowSpawn.GetComponent<Arrow>().setTarget(hit.point);
             source.PlayOneShot(AudioManager.instance.audioClip[1]);
             arrow.ReduceArrowAmount();
-            //GameData.arrow = arrow.GetArrowAmount();
             Debug.Log("Arrow Amount: " + arrow.GetArrowAmount());
             Destroy(arrowSpawn, 1.5f);
 
@@ -335,11 +333,13 @@ public class Player : MonoBehaviour
                 {
                     Destroy(hit.gameObject);
                     Spawner.instance.FigurineHandler();
+                    source.PlayOneShot(AudioManager.instance.audioClip[13]);
                 }
 
-                if(Spawner.instance.figurineIndex >= 4)
+                if (Spawner.instance.figurineIndex >= 4)
                 {
                     Destroy(hit.gameObject);
+                    source.PlayOneShot(AudioManager.instance.audioClip[13]);
                 }
             }
         }

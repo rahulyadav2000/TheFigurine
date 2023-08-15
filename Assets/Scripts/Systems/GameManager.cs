@@ -56,20 +56,20 @@ public class GameManager : MonoBehaviour
     {
         if(Player.instance.isFinalFigurineCollected)
         {
-            SceneManager.LoadScene(3);
+            SceneManager.LoadScene(4);
         }
     }
 
     public void RestartGame()
     {
-        SceneManager.LoadScene(0);
+        SceneManager.LoadScene(2);
         Time.timeScale = 1f;
         GameData.health = 100;
     }
 
     public void LoseScreenEnabler()
     {
-        SceneManager.LoadScene(4);
+        SceneManager.LoadScene(5);
     }
 
     public void MenuScreen()
@@ -102,5 +102,33 @@ public class GameManager : MonoBehaviour
         {
             optionsMenu.SetActive(true);
         }
+    }
+
+    public void LoadGame()
+    {
+        GameData data = LoadSaveSystem.LoadGameData();
+        if(Player.instance != null)
+        {
+            Player.instance.arrow.arrowAmount = data.GetArrows();
+            Spawner.instance.figurineIndex = data.GetFigurineAmount();
+
+            Vector3 position;
+            position.x = data.playerPos[0];
+            position.y = data.playerPos[1];
+            position.z = data.playerPos[2];
+            Player.instance.transform.position = position;
+        }
+    }
+
+    public void SaveGame()
+    {
+        LoadSaveSystem.SaveGameData(Player.instance, Player.instance.arrow);
+    }
+
+    public void LoadGameData()
+    {
+        SceneManager.LoadScene(2);
+        GameData.health = 100;
+        LoadGame();
     }
 }

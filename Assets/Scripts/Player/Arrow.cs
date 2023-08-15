@@ -58,7 +58,7 @@ public class Arrow : MonoBehaviour
             EnemyHealthSystem smasherHealth = collision.gameObject.GetComponent<EnemyHealthSystem>();
             if(smasherHealth != null)
             {
-                smasherHealth.ReduceHealth(5);
+                smasherHealth.ReduceHealth(8);
                 Debug.Log("Smasher Current Health: " + smasherHealth.GetHealth());
                 Player.instance.source.PlayOneShot(AudioManager.instance.audioClip[0]);
                 particle.SetActive(true);
