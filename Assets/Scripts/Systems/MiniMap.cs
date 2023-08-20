@@ -12,6 +12,7 @@ public class MiniMap : MonoBehaviour
         newPos.y = transform.position.y;
         transform.position = newPos;
 
-        transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f);
+        // rotates the minimap camera based on the player rotation
+        transform.rotation = Quaternion.Euler(90f, player.eulerAngles.y, 0f); 
     }
 }

@@ -11,21 +11,21 @@ public class ArrowSystem : MonoBehaviour
         arrowAmount = GameData.arrow;
     }
     // Start is called before the first frame update
-    public int IncreaseArrowAmount(int amount)
+    public int IncreaseArrowAmount(int amount) // function to increase the arrow amount
     {
         arrowAmount += amount;
         GameData.arrow = arrowAmount;
         return arrowAmount;
     }
 
-    public int ReduceArrowAmount()
+    public int ReduceArrowAmount()  //// function to reduce the arrow amount
     {
         arrowAmount--;
         GameData.arrow = arrowAmount;
         return arrowAmount;
     }
 
-    public int GetArrowAmount()
+    public int GetArrowAmount() // function to return the arrow amount
     {
         arrowAmount = GameData.arrow;
         return arrowAmount;

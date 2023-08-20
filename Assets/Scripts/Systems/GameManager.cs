@@ -31,11 +31,11 @@ public class GameManager : MonoBehaviour
     {
         if(isWinning)
         {
-            WinningState();
+            WinningState(); // calls the winning state function
         }
     }
 
-    public void ToggleInventorySystem(bool isActiveInven)
+    public void ToggleInventorySystem(bool isActiveInven) // toggles the inventory system UI
     {
         if(inventoryUI != null)
         {
@@ -83,20 +83,21 @@ public class GameManager : MonoBehaviour
         Time.timeScale = 1f;
     }
 
-    public void TogglePauseMenu(bool isActive)
+    public void TogglePauseMenu(bool isActive)  // toggles the pause menu and stops the game time when pause menu is enabled
     {
-        if(pauseMenu != null)
+        if (pauseMenu != null)
         {
             pauseMenu.SetActive(isActive);
             Time.timeScale = 0.0f;
-        }
-        if(!isActive)
-        {
-            Time.timeScale = 1.0f;
+
+            if (!isActive)
+            {
+                Time.timeScale = 1.0f;
+            }
         }
     }
 
-    public void OptionMenu()
+    public void OptionMenu()    // toggles the option menu
     {
         if(optionsMenu != null)
         {
@@ -104,8 +105,9 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void LoadGame()
+    public void LoadGame()  // loads the game data
     {
+        // loads the arrow amount, figurine amount and player position
         GameData data = LoadSaveSystem.LoadGameData();
         if(Player.instance != null)
         {
@@ -120,12 +122,12 @@ public class GameManager : MonoBehaviour
         }
     }
 
-    public void SaveGame()
+    public void SaveGame()  // function to call the saved data of the game
     {
         LoadSaveSystem.SaveGameData(Player.instance, Player.instance.arrow);
     }
 
-    public void LoadGameData()
+    public void LoadGameData()  // function to call the load game function through UI button
     {
         SceneManager.LoadScene(2);
         GameData.health = 100;

@@ -8,7 +8,7 @@ public class BearAttack : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        if (other.gameObject.tag == "Player") //reduces the player health when collides with the player
         {
             HealthSystem healthSystem = other.gameObject.GetComponent<HealthSystem>();
             healthSystem.ReduceHealth(damage);

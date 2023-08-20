@@ -21,7 +21,7 @@ public class AttackTask : Task
         this.armCollider = armCollider;
     }
 
-    public override void StartTask()
+    public override void StartTask()    // this class performs the attack2 task
     {
         navAgent.ResetPath();
         navAgent.isStopped= true;

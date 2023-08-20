@@ -13,16 +13,12 @@ public class DayNightCycle : MonoBehaviour
 
     private bool eOD;
     private bool nextDay;
-    // Start is called before the first frame update
-    void Start()
-    {
-        
-    }
+
 
     // Update is called once per frame
     void Update()
     {
-
+        // Check if the rotation angle indicates it's day or night.
         if (transform.eulerAngles.x>0 && transform.eulerAngles.x<180)
         {
             isNight = false;
@@ -35,6 +31,7 @@ public class DayNightCycle : MonoBehaviour
             isDay = false;
         }
 
+        // Rotate the directional light based on whether it's day or night.
         if (isDay)
             transform.Rotate(1 * dayTimeDuration * Time.deltaTime, 0, 0);
 
@@ -46,7 +43,8 @@ public class DayNightCycle : MonoBehaviour
 
     void DayIncreament()
     {
-        if(transform.eulerAngles.x>270 && transform.eulerAngles.x < 280)
+        // Check if the rotation angle indicates the end of the day.
+        if (transform.eulerAngles.x>270 && transform.eulerAngles.x < 280)
         {
             eOD = true;
         }
@@ -57,7 +55,7 @@ public class DayNightCycle : MonoBehaviour
             eOD = false;
         }
 
-        if(eOD && !nextDay)
+        // If it's the end of the day and the next day hasn't been assigned
         {
             nextDay = true;
         }

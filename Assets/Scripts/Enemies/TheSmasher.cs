@@ -20,12 +20,13 @@ public class TheSmasher : MonoBehaviour
         startPosition = transform.position;
 
         target = GameObject.FindGameObjectWithTag("Player").transform;
-
     }
 
     // Update is called once per frame
     void Update()
     {
+        //adds the task for smasher enemy in the tasks list 
+
         PatrolTask patrolTask = new PatrolTask(taskManager, navAgent, PatrolPoint(), anim);
         taskManager.AddTask(patrolTask);
 
@@ -39,15 +40,17 @@ public class TheSmasher : MonoBehaviour
         taskManager.AddTask(dieTask);
     }
 
-    public Vector3 PatrolPoint()
+    public Vector3 PatrolPoint() // this function calculates and return a random patrol point for the smasher enemy within a patrol radius
     {
-        float xToAdd = Random.Range(-patrolRadius, patrolRadius);
-        float zToAdd = Random.Range(-patrolRadius, patrolRadius);
-        if (xToAdd >= -2f && xToAdd <= 2f)
-            xToAdd *= 5;
-        if (zToAdd >= -2f && zToAdd <= 2f)
-            zToAdd *= 5;
-        Vector3 patrolPoint = startPosition + new Vector3(xToAdd, 0, -(zToAdd));
+        float xCoord = Random.Range(-patrolRadius, patrolRadius);
+        float zCoord = Random.Range(-patrolRadius, patrolRadius);
+        if (xCoord >= -2f && xCoord <= 2f)
+            xCoord *= 5; // multiply xCoord with 5 to encourage the movement when xCoord is too small 
+        if (zCoord >= -2f && zCoord <= 2f)
+            zCoord *= 5;    // multiply zCoord with 5 to encourage the movement when zCoord is too small
+
+        // calculates the patrolPoint by adding a new xCoord and zCoord value to the start position of the smasher enemy
+        Vector3 patrolPoint = startPosition + new Vector3(xCoord, 0, -(zCoord));
         return patrolPoint;
     }
 }

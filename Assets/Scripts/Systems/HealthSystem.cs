@@ -14,7 +14,7 @@ public class HealthSystem : MonoBehaviour
         currentHealth = GameData.health;
     }
 
-    public void AddHealth(float health)
+    public void AddHealth(float health) // function to add health to the current health
     {
         if(currentHealth != maxHealth )
         {
@@ -23,7 +23,7 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    public void ReduceHealth(float damagePoint)
+    public void ReduceHealth(float damagePoint) // function to reduce health to the current health
     {
         if(currentHealth != 0)
         {
@@ -32,13 +32,13 @@ public class HealthSystem : MonoBehaviour
         }
     }
 
-    public float GetHealth()
+    public float GetHealth()    // function to return the current health
     {
         currentHealth = GameData.health;
         return currentHealth;
     }
 
-    public float GetMaxHealth()
+    public float GetMaxHealth() // function to return max health
     {
         return maxHealth;
     }

@@ -7,10 +7,10 @@ public class Transition : MonoBehaviour
 {
     private void OnTriggerEnter(Collider other)
     {
+        // if the player collides with the portal collider, it will destroy the game object and transition to the second scene
         if(other.gameObject.tag == "Player")
         {
-            //DontDestroyOnLoad(other.gameObject);
-            SceneManager.LoadScene(2, LoadSceneMode.Single);
+            SceneManager.LoadScene(3);
             Destroy(gameObject, 0.5f);
         }
     }

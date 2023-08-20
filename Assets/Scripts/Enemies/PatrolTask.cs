@@ -29,18 +29,15 @@ public class PatrolTask : Task
         taskManager.StartCoroutine(StartPatrol());
     }
 
-    public IEnumerator StartPatrol()
+    public IEnumerator StartPatrol() // assings the patrol points for the enemy and set their destination
     {        
         yield return new WaitForSeconds(idleTime);
 
         Vector3 direction = (patrolPoint - navAgent.gameObject.transform.position).normalized;
-        //Debug.Log("Patrol Points: " + patrolPoint);
-        //Debug.Log("navAgent Position: " + navAgent.gameObject.transform.position);
 
         if(direction !=Vector3.zero)
         {
             Quaternion directionalRotation = Quaternion.LookRotation(new Vector3(direction.x, 0, direction.z));
-            //navAgent.gameObject.transform.LookAt(navAgent.gameObject.transform.position + direction);
             navAgent.gameObject.transform.rotation = Quaternion.Lerp(navAgent.gameObject.transform.rotation, directionalRotation, 1);
         }
 

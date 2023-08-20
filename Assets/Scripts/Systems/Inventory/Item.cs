@@ -18,7 +18,7 @@ public class Item : ScriptableObject
         MEAT
     }
     
-    public void Use()
+    public void Use() // it does the task assigned to the items 
     {
         switch (type)
         {

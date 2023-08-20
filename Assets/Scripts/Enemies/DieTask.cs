@@ -18,7 +18,7 @@ public class DieTask : Task
         this.isWanderer = isWanderer;
     }
 
-    public override void StartTask()
+    public override void StartTask() // this class performs the die task for the enemy wanderer or smasher
     {
         agent.ResetPath();
         agent.isStopped = true;
@@ -26,8 +26,8 @@ public class DieTask : Task
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
         animator.SetBool("attack", false);
+        animator.ResetTrigger("attack");
         animator.SetBool("death", true);
-        //TaskManager.Destroy(taskManager.gameObject, 2.5f);
         taskManager.StartCoroutine(DestroyGameObj());
         if (isWanderer)
         {
@@ -36,7 +36,7 @@ public class DieTask : Task
         FinishTask();
     }
 
-    public IEnumerator CheckingWandererDead()
+    public IEnumerator CheckingWandererDead() // keeps track of the wanderer enemy death
     {
         yield return new WaitForSeconds(2.47f);
         taskManager.isWandererDead = true;
@@ -45,7 +45,7 @@ public class DieTask : Task
     public IEnumerator DestroyGameObj()
     {
         yield return new WaitForSeconds(2.5f);
-        taskManager.gameObject.SetActive(false);
+        taskManager.gameObject.SetActive(false); // sets the enemy gameobjet to false for the object pool
     }
 
 }

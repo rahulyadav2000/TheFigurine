@@ -18,7 +18,7 @@ public class EnemyHealthSystem : MonoBehaviour
         currentHealth = maxHealth;
     }
 
-    public void AddHealth(float health)
+    public void AddHealth(float health) // function to add health to the current health
     {
         if(currentHealth != maxHealth )
         {
@@ -26,7 +26,7 @@ public class EnemyHealthSystem : MonoBehaviour
         }
     }
 
-    public void ReduceHealth(float damagePoint)
+    public void ReduceHealth(float damagePoint) // function to reduce health from the current health
     {
         if(currentHealth != 0)
         {
@@ -34,7 +34,7 @@ public class EnemyHealthSystem : MonoBehaviour
         }
     }
 
-    public float GetHealth()
+    public float GetHealth()    // function to get to the current health
     {
         return currentHealth;
     }

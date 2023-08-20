@@ -19,7 +19,7 @@ public class ReduceHealth: MonoBehaviour
     }
     public void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.CompareTag("Player"))
+        if (other.gameObject.CompareTag("Player")) // reduces the player health, turn on the particle system and plays the sound for the particular enemy type
         {
             HealthSystem healthSystem = other.gameObject.GetComponent<HealthSystem>();
             healthSystem.ReduceHealth(damage);

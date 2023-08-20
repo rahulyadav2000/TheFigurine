@@ -20,30 +20,26 @@ public class InventoryManager : MonoBehaviour
         instance = this;
     }
 
-    public void Update()
-    {
-
-    }
     public void AddItem(Item item)
     {
         if(items.Count >= weight)
         {
-            return;
+            return; // if the item count exceeds weight, it will return inventory is full
         }
-        items.Add(item);
-        UpdatingItem();
+        items.Add(item);    // adds the item in the list
+        UpdatingItem();     // update the UI to see the changes
     }
 
-    public void RemoveItem(Item item)
+    public void RemoveItem(Item item)   //remove the item from the inventory 
     {
         items.Remove(item);
     }
 
-    public void UpdatingItem()
+    public void UpdatingItem()  // updates the UI
     {
         int itemCount = items.Count;
 
-        // Instantiate additional items if needed
+        // Instantiate items if required
         for (int i = inventoryItem.childCount; i < itemCount; i++)
         {
             GameObject go = Instantiate(itemPrefab, inventoryItem);
@@ -52,21 +48,22 @@ public class InventoryManager : MonoBehaviour
             {
                 var icon = go.transform.Find("Item Image").GetComponent<Image>();
 
-                icon.sprite = item.icon;
+                icon.sprite = item.icon;    // sets the item icon
             }
         }
 
-        for (int i = 0; i < itemCount; i++)
+        for (int i = 0; i < itemCount; i++) // update the inventory handler component with items
         {
             GameObject itemGameObject = inventoryItem.GetChild(i).gameObject;
             InventoryHandler handler = itemGameObject.GetComponent<InventoryHandler>();
 
             if (handler != null)
             {
-                handler.AddItem(items[i]);
+                handler.AddItem(items[i]);  // adds the correspoding item to handler
             }
         }
 
+        // destroys the extra item slots 
         for (int i = itemCount; i < inventoryItem.childCount; i++)
         {
             GameObject itemGameObject = inventoryItem.GetChild(i).gameObject;
@@ -74,12 +71,9 @@ public class InventoryManager : MonoBehaviour
         }
 
         SettingTheItems();
-
-        Debug.Log("Inventory Item Child: " + inventoryItem.childCount);
-        Debug.Log("Item Count: " + itemCount);
-
     }
 
+    // update the item displayed in the inventory system 
     public void SettingTheItems()
     {
         inventoryHandler = inventoryItem.GetComponentsInChildren<InventoryHandler>();

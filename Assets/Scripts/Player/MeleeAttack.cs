@@ -8,22 +8,20 @@ public class MeleeAttack : MonoBehaviour
 
     public void OnTriggerEnter(Collider other)
     {
+        // if knife collides with smasher, it reduce the smasher's health
         if (other.gameObject.CompareTag("Smasher"))
         {
-            Debug.Log("Working Collisionnnnn!");
             EnemyHealthSystem smasherHealth = other.gameObject.GetComponent<EnemyHealthSystem>();
 
             smasherHealth.ReduceHealth(damage - 80f);
-            Debug.Log("Smasher Current Health: " + smasherHealth.GetHealth());
         }
 
+        // if knife collides with wanderer, it reduce the wanderer's health
         if(other.gameObject.CompareTag("Wanderer"))
         {
             EnemyHealthSystem wandererHealth = other.gameObject.GetComponent<EnemyHealthSystem>();
 
             wandererHealth.ReduceHealth(damage);
-            Debug.Log("Wanderer Current Health: " + wandererHealth.GetHealth());
-
         }
     }
 

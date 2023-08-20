@@ -17,7 +17,7 @@ public class MultiAttackTask : Task
         this.target = target;
     }
 
-    public override void StartTask()
+    public override void StartTask() // this class performs the random attack animations for the enemy smasher
     {
         navAgent.ResetPath();
         navAgent.isStopped = true;

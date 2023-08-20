@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Task 
 {
-    public enum TaskTypes
+    public enum TaskTypes // enum class for task type
     {
         PATROL,
         ATTACK,
@@ -16,15 +16,14 @@ public class Task
     public TaskTypes taskTypes;
     public float utilityScore;
     public TaskManager tM;
-    public bool isFinished { get; protected set; }
+    public bool isFinished { get; protected set; } // boolean for the checking the task status. whether the task is finished or not
     public Task(TaskTypes type, TaskManager taskManager)
     {
         this.taskTypes= type;
-        //this.utilityScore = score;
         this.tM = taskManager;
     }
 
-    public virtual void StartTask() { }
+    public virtual void StartTask() { } // virtual function which performs the logic for every task
 
     public void FinishTask()
     {

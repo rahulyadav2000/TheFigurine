@@ -21,7 +21,7 @@ public class Attack2Task : Task
         this.sphereCollider = sphereCollider;
     }
 
-    public override void StartTask()
+    public override void StartTask() // this class performs the attack2 task
     {
         navAgent.ResetPath();
         navAgent.isStopped= true;
@@ -29,15 +29,12 @@ public class Attack2Task : Task
         navAgent.stoppingDistance = 1.5f;
         animator.SetBool("walk", false);
         animator.SetBool("run", false);
-        //Debug.Log("working!!");
-        //particleObj.SetActive(false);
         taskManager.StartCoroutine(StartAttack());
         taskManager.gameObject.transform.LookAt(target);
     }
 
     IEnumerator StartAttack()
     {
-        //yield return new WaitForSeconds(1f);
         animator.SetBool("specialAttack", true); 
         animator.SetBool("attack", false);
 

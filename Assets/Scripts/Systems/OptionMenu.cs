@@ -13,6 +13,7 @@ public class OptionMenu : MonoBehaviour
 
     public Toggle screenToggle, syncToggle;
 
+    // list for the resolutions 
     public List<int> widths = new List<int>() { 568, 960, 1280, 1920 };
     public List<int> heights = new List<int>() { 320, 540, 800, 1080 };
 
@@ -31,8 +32,10 @@ public class OptionMenu : MonoBehaviour
             settings.SetActive(true);
         }
 
+        // Set fullscreen toggle to match current fullscreen state.
         screenToggle.isOn = Screen.fullScreen;
 
+        // Set vSync toggle to match current vSync state.
         if (QualitySettings.vSyncCount == 0)
         {
             syncToggle.isOn = false;
@@ -62,7 +65,7 @@ public class OptionMenu : MonoBehaviour
         }
     }
 
-    public void Apply()
+    public void Apply() // function to apply the changed settings
     {
         if (syncToggle.isOn)
         {
@@ -78,7 +81,7 @@ public class OptionMenu : MonoBehaviour
         Screen.SetResolution(width, height, screenToggle.isOn);
     }
 
-    public void LeftButton()
+    public void LeftButton()  // function to move to the previous resoluton
     {
         index--;
         if (index < 0)
@@ -87,7 +90,7 @@ public class OptionMenu : MonoBehaviour
         }
         ResTextUpdate();
     }
-    public void RightButton()
+    public void RightButton()   // function to move to the next resoluton
     {
         index++;
         if (index > widths.Count - 1)

@@ -17,12 +17,10 @@ public class ChaseTask : Task
         this.taskManager = taskManager;
     }
 
-    public override void StartTask()
+    public override void StartTask() // this class performs the chase task to chase the player
     {
         animator.SetBool("walk", false);
         animator.SetBool("attack", false);
-        //animator.SetBool("roar", false);
-        //animator.SetBool("smashAttack", false);
         agent.isStopped= false;
         agent.speed = 2f;
         animator.SetBool("run", true);

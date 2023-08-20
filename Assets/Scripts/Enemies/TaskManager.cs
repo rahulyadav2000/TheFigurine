@@ -17,62 +17,42 @@ public class TaskManager : MonoBehaviour
         player = GameObject.FindGameObjectWithTag("Player").transform;
         spawner = Spawner.instance;
     }
-    public void AddTask(Task task)
+    public void AddTask(Task task) // adds the task into the tasks list
     {
         tasks.Add(task);
     }
 
-    public void RemoveTask()
+    public void RemoveTask() //  removes the task from the tasks list
     {
         tasks.Clear();
     }
     public void LateUpdate()
     {
-        tasks.RemoveAll(task => task.isFinished);
+        tasks.RemoveAll(task => task.isFinished);   // emptys the list before assigning the task
 
         if(tasks.Count == 0) { return; }
 
         foreach (Task task in tasks)
         {
-            /*if (task.taskTypes == TaskTypes.PATROL)
-            {
-                task.utilityScore = CallPatrolScore();
-            }
-            else if (task.taskTypes == TaskTypes.ATTACK)
-            {
-                task.utilityScore = CallAttackScore();
-            }
-            else if(task.taskTypes == TaskTypes.ATTACK2)
-            {
-                task.utilityScore = CallAttack2Score();
-            }
-            else if(task.taskTypes == TaskTypes.CHASE)
-            {
-                task.utilityScore = CallChaseScore();
-            }
-            else if(task.taskTypes == TaskTypes.DIE)
-            {
-                task.utilityScore = CallDieScore();
-            }*/
-
             UpdateTaskUtilityScore(task);
         }
 
-
-
         Task selectedTask = GetHighestUtilityTask();
 
+        // checks if there is any processed task and the task is not the selected task
         if (currentTask != null && currentTask != selectedTask)
         {
-            currentTask.FinishTask();
+            currentTask.FinishTask(); // finishes the task
             currentTask = null;
         }
 
+        // checks if there is no task and there is a task with the highest utility score
         if (currentTask == null && selectedTask != null)
         {
-            currentTask = selectedTask;
-            PerfomTask(currentTask);
+            currentTask = selectedTask; // assigns current task to the task with highest utility score
+            PerfomTask(currentTask); // performs the current task
         }
+        // check if there is a task and performs the current task
         else if (currentTask != null)
         {
             PerfomTask(currentTask);
@@ -81,43 +61,43 @@ public class TaskManager : MonoBehaviour
         WandererCheck();
     }
 
-    public void UpdateTaskUtilityScore(Task task)
+    public void UpdateTaskUtilityScore(Task task) // the funstion updates the utility score based on task type
     {
         switch (task.taskTypes)
         {
             case TaskTypes.PATROL:
                 PatrolTask patrolTask = (PatrolTask)task;
-                task.utilityScore = CallPatrolScore();
+                task.utilityScore = CallPatrolScore(); // calculates the utility score for the patrol task 
                 break;
 
             case TaskTypes.ATTACK:
                 AttackTask attackTask = (AttackTask)task;
-                task.utilityScore = CallAttackScore();
+                task.utilityScore = CallAttackScore();  // calculates the utility score for the attack task
                 break;
 
             case TaskTypes.MULTIATTACK:
                 MultiAttackTask multiAttackTask = (MultiAttackTask)task;
-                task.utilityScore = CallMultiAttackScore();
+                task.utilityScore = CallMultiAttackScore(); // calculates the utility score for the multiattack task
                 break;
 
             case TaskTypes.ATTACK2:
                 Attack2Task attack2Task = (Attack2Task)task;
-                task.utilityScore = CallAttack2Score();
+                task.utilityScore = CallAttack2Score(); // calculates the utility score for the attack2 task
                 break;
 
             case TaskTypes.CHASE:
                 ChaseTask chaseTask = (ChaseTask)task;
-                task.utilityScore = CallChaseScore();
+                task.utilityScore = CallChaseScore();   // calculates the utility score for the chase task
                 break;
 
             case TaskTypes.DIE:
                 DieTask dieTask = (DieTask)task;
-                task.utilityScore = CallDieScore();
+                task.utilityScore = CallDieScore(); // calculates the utility score for the die task
                 break;
         }
     }
 
-    private Task GetHighestUtilityTask()
+    private Task GetHighestUtilityTask() //this function selects and returns the task with highest score from the task list
     {
         float highestScore = float.MinValue;
         Task selectedTask = null;
@@ -125,8 +105,8 @@ public class TaskManager : MonoBehaviour
         {
             if (task.utilityScore > highestScore)
             {
-                highestScore = task.utilityScore;
-                selectedTask = task;
+                highestScore = task.utilityScore; // assigns the highest score to the utility score of the current task
+                selectedTask = task; // assigns the selected task with the highest score task
             }
         }
         return selectedTask;
@@ -134,87 +114,56 @@ public class TaskManager : MonoBehaviour
 
     public void PerfomTask(Task task)
     {
-        task.StartTask();
-/*        switch (task.taskTypes)
-        {
-            case TaskTypes.PATROL:
-                PatrolTask patrolTask = (PatrolTask)task;
-                patrolTask.StartTask();
-                break;
-            case TaskTypes.ATTACK:
-                AttackTask attackTask = (AttackTask)task;
-                attackTask.StartTask();
-                break;
-            case TaskTypes.CHASE:
-                ChaseTask chaseTask = (ChaseTask)task;
-                chaseTask.StartTask();
-                break;
-            case TaskTypes.ATTACK2:
-                Attack2Task attack2Task = (Attack2Task)task;
-                attack2Task.StartTask();
-                break;
-            case TaskTypes.DIE:
-                DieTask dieTask = (DieTask)task;
-                dieTask.StartTask();
-                tasks.Remove(task);
-                break;
-        }*/
+        task.StartTask(); // calls the starttask function to start task
     }
 
     public float CallPatrolScore()
     {
-        float distance = Vector3.Distance(transform.position, player.position);
+        float distance = Vector3.Distance(transform.position, player.position); 
         float patrolUtility = distance > 9f ? 1.0f : 0.0f;
-        //Debug.Log("Patrol Utitliy Score: " + patrolUtility);
-        return patrolUtility;
+        return patrolUtility;   // scores the patrol task based on the distance between the player and enemy
     }
 
     public float CallAttackScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
         float attackUtility = distance <= 1.5f ? 1.0f : 0.0f;
-        //Debug.Log("Attack Utility Score: " + attackUtility);
-        return attackUtility;
+        return attackUtility;   // scores the attack task based on the distance between the player and enemy
     }
     
     public float CallAttack2Score()
     {
         float distance = Vector3.Distance(transform.position, player.position);
         float attack2Utility = distance <= 2.8f && distance > 1.8f ? 1.0f : 0.0f;
-        //Debug.Log("Attack Utility Score: " + attackUtility);
-        return attack2Utility;
+        return attack2Utility;  // scores the attack task based on the distance between the player and enemy
     }
     
     public float CallMultiAttackScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
         float multiAttackUtility = distance <= 2.3f && distance > 1f ? 1.0f : 0.0f;
-        //Debug.Log("Attack Utility Score: " + attackUtility);
-        return multiAttackUtility;
+        return multiAttackUtility;  // scores the attack task based on the distance between the player and enemy
     }
 
     public float CallChaseScore()
     {
         float distance = Vector3.Distance(transform.position, player.position);
         float chaseUtility = distance < 9f ? 1.0f : 0.0f;
-        //Debug.Log("Chase Utility Score: " + chaseUtility);
-        return chaseUtility;
+        return chaseUtility;    // scores the chase task based on the distance between the player and enemy
     }
 
     public float CallDieScore()
     {
         float health = healthSystem.GetHealth();
         float dieUtility = health <= 0f ? 1.0f : 0.0f;
-        //Debug.Log("Die Utility Score: " + dieUtility);
-        return dieUtility;
+        return dieUtility;  // scores the die task based on the current health of the enemy
     }
 
-    public void WandererCheck()
+    public void WandererCheck() // tells about the counter of the wanderer enemy death
     {
         if(isWandererDead)
         {
             spawner.wandererCount++;
-            Debug.Log("Wanderer Dead: " + spawner.wandererCount);
             isWandererDead = false;
         }
     }

@@ -25,7 +25,6 @@ public class BearController : MonoBehaviour
     void Start()
     {
         playerTransform = GameObject.FindGameObjectWithTag("Player").transform;
-        
     }
 
     // Update is called once per frame
@@ -50,7 +49,7 @@ public class BearController : MonoBehaviour
         }
         ChasePlayerTask();
 
-        if(bearHealth.GetHealth() <= 0) 
+        if(bearHealth.GetHealth() <= 0) // plays death animation when bear dies
         {
             agent.speed = 0.0f;
             animator.SetBool("death", true);
@@ -62,7 +61,7 @@ public class BearController : MonoBehaviour
         }
     }
 
-    public void MeatSpawner()
+    public void MeatSpawner() // spawns the meat prefab near the bear when he dies 
     {
         if (meatPrefab != null)
         {
@@ -72,7 +71,7 @@ public class BearController : MonoBehaviour
         }
     }
 
-    public void CheckNextWaypoint(float currentDistance)
+    public void CheckNextWaypoint(float currentDistance) // checks the distance from the waypoint and increament its index 
     {
         if(currentDistance < minDistanceToWaypoint)
         {
@@ -81,7 +80,7 @@ public class BearController : MonoBehaviour
         }
     }
 
-    public void CallForLastWaypoint()
+    public void CallForLastWaypoint() // assings the value for waypoint to the first waypiont in the list after bear reaches to the last poinit
     {
         if(index > lastWaypointIndex)
         {
@@ -90,7 +89,7 @@ public class BearController : MonoBehaviour
         targetWaypoint = waypointsList[index];
     }
 
-    public void ChasePlayerTask()
+    public void ChasePlayerTask() // chases and attacks the player when the player comes within the range
     {
         float distance = Vector3.Distance(transform.position, playerTransform.position);
 
@@ -115,7 +114,7 @@ public class BearController : MonoBehaviour
         }
     }
 
-    public void SetWaypoints(List<Transform> waypoints)
+    public void SetWaypoints(List<Transform> waypoints) // this function adds the waypoints into the list in spawner class
     {
         waypointsList = waypoints;
         if (waypointsList.Count > 0)
@@ -125,7 +124,7 @@ public class BearController : MonoBehaviour
         }
     }
 
-    public void ShuffleWaypoints()
+    public void ShuffleWaypoints() // this function randomizes the waypoint points for the bear to follow 
     {
         List<Transform> randomWP = new List<Transform>(waypointsList);
 

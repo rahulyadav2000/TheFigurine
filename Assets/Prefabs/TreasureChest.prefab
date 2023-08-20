@@ -192,7 +192,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   miniMapCam: {fileID: 0}
-  miniMapRadius: 3
+  radius: 3
 --- !u!1 &7614183714234038515
 GameObject:
   m_ObjectHideFlags: 0
